@@ -81,8 +81,6 @@ class AdminPanelProvider extends PanelProvider
                         slug: 'profile',
                     )
                     ->enableBrowserSessions(),
-
-
                 FilamentLoggerPlugin::make(),
             ])
             ->middleware([

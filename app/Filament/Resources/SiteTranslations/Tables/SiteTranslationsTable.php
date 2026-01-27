@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\SiteTranslations\Tables;
 
+use App\Models\SiteTranslation;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class SiteTranslationsTable
@@ -16,27 +19,40 @@ class SiteTranslationsTable
     {
         return $table
             ->columns([
-                TextColumn::make('category')
-                    ->searchable(),
                 TextColumn::make('key')
-                    ->searchable(),
-                IconColumn::make('is_published')
-                    ->boolean(),
+                    ->label(__('app.label.key'))
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('value')
+                    ->label(__('app.label.value'))
+                    ->searchable()
+                    ->limit(50),
+
+                ToggleColumn::make('is_published')
+                    ->label(__('app.label.show_on_site'))
+                    ->sortable()
+                    ->onIcon('heroicon-m-check-circle')
+                    ->offIcon('heroicon-m-x-circle')
+                    ->onColor('success')
+                    ->offColor('danger'),
+
                 TextColumn::make('created_at')
+                    ->label(__('app.label.created_at'))
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('is_published')
+                    ->label(__('app.label.status'))
+                    ->options(SiteTranslation::getStatusOptions())
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

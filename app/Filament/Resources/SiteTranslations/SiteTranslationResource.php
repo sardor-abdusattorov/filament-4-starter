@@ -7,7 +7,6 @@ use App\Filament\Resources\SiteTranslations\Pages\EditSiteTranslation;
 use App\Filament\Resources\SiteTranslations\Pages\ListSiteTranslations;
 use App\Filament\Resources\SiteTranslations\Pages\ViewSiteTranslation;
 use App\Filament\Resources\SiteTranslations\Schemas\SiteTranslationForm;
-use App\Filament\Resources\SiteTranslations\Schemas\SiteTranslationInfolist;
 use App\Filament\Resources\SiteTranslations\Tables\SiteTranslationsTable;
 use App\Models\SiteTranslation;
 use BackedEnum;
@@ -27,14 +26,31 @@ class SiteTranslationResource extends Resource
         return SiteTranslationForm::configure($schema);
     }
 
-    public static function infolist(Schema $schema): Schema
-    {
-        return SiteTranslationInfolist::configure($schema);
-    }
-
     public static function table(Table $table): Table
     {
         return SiteTranslationsTable::configure($table);
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.label.settings');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('app.label.site_translations_single');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('app.label.site_translations_plural');
+    }
+
+    protected static ?int $navigationSort = 2;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::$model::count();
     }
 
     public static function getRelations(): array
