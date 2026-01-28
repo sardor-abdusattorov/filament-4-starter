@@ -8,6 +8,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
+use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -19,6 +20,9 @@ use Filament\Schemas\Schema;
 class Settings extends Page implements HasForms
 {
     use InteractsWithForms;
+    use InteractsWithFormActions;
+
+    protected static string $view = 'filament.pages.settings';
 
     protected static ?string $slug = 'settings';
 
