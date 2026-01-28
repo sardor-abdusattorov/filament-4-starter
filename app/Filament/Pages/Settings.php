@@ -22,7 +22,7 @@ class Settings extends Page implements HasForms
     use InteractsWithForms;
     use InteractsWithFormActions;
 
-    protected static string $view = 'filament.pages.settings';
+    protected string $view = 'filament.pages.settings';
 
     protected static ?string $slug = 'settings';
 
