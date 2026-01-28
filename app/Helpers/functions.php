@@ -1,15 +1,54 @@
 <?php
 
+use App\Models\Settings;
 use App\Models\SiteSettings;
 use App\Models\SiteTranslation;
 use Illuminate\Support\Facades\Cache;
 
+if (! function_exists('settings')) {
+    /**
+     * Get or set settings value with caching
+     *
+     * @param  string  $key  Setting key (e.g., 'seo.title', 'metrics.yandex')
+     * @param  mixed  $default  Default value if not found
+     * @return mixed
+     */
+    function settings(string $key, mixed $default = null): mixed
+    {
+        $cacheKey = "settings.{$key}";
+
+        return Cache::remember($cacheKey, 3600, function () use ($key, $default) {
+            $setting = Settings::where('key', $key)->first();
+
+            return $setting ? $setting->value : $default;
+        });
+    }
+}
+
+if (! function_exists('clear_settings_cache')) {
+    /**
+     * Clear settings cache
+     *
+     * @param  string|null  $key  Setting key (if null - clear all)
+     */
+    function clear_settings_cache(?string $key = null): void
+    {
+        if ($key) {
+            Cache::forget("settings.{$key}");
+        } else {
+            Settings::all()->each(function ($setting) {
+                Cache::forget("settings.{$setting->key}");
+            });
+        }
+    }
+}
+
 if (! function_exists('site_setting')) {
     /**
-     * Получить настройку сайта из базы данных с кэшированием
+     * Get site setting from database with caching
      *
-     * @param  string  $key  Ключ настройки
-     * @param  mixed  $default  Значение по умолчанию
+     * @param  string  $key  Setting key
+     * @param  mixed  $default  Default value
      * @return mixed
      */
     function site_setting(string $key, mixed $default = null): mixed
@@ -29,16 +68,15 @@ if (! function_exists('site_setting')) {
 
 if (! function_exists('clear_site_settings_cache')) {
     /**
-     * Очистить кэш настроек сайта
+     * Clear site settings cache
      *
-     * @param  string|null  $key  Ключ настройки (если null - очистить все)
+     * @param  string|null  $key  Setting key (if null - clear all)
      */
     function clear_site_settings_cache(?string $key = null): void
     {
         if ($key) {
             Cache::forget("site_setting.{$key}");
         } else {
-            // Получаем все настройки и очищаем их кэш
             SiteSettings::all()->each(function ($setting) {
                 Cache::forget("site_setting.{$setting->name}");
             });
@@ -48,13 +86,12 @@ if (! function_exists('clear_site_settings_cache')) {
 
 if (! function_exists('translator')) {
     /**
-     * Получить перевод из базы данных с кэшированием
-     * Возвращает RAW текст - используйте translator_text() или translator_html() для безопасного вывода
+     * Get translation from database with caching
      *
-     * @param  string  $category  Категория перевода
-     * @param  string|null  $key  Ключ перевода
-     * @param  array  $replace  Массив замен
-     * @param  string|null  $locale  Локаль
+     * @param  string  $category  Translation category
+     * @param  string|null  $key  Translation key
+     * @param  array  $replace  Replacements array
+     * @param  string|null  $locale  Locale
      * @return string
      */
     function translator($category, $key = null, $replace = [], $locale = null)
@@ -69,7 +106,6 @@ if (! function_exists('translator')) {
             return $category;
         }
 
-        // Кэширование на 1 час
         $cacheKey = "translator.{$category}.{$key}";
         $row = Cache::remember($cacheKey, 3600, function () use ($category, $key) {
             return SiteTranslation::where('category', $category)
@@ -102,15 +138,7 @@ if (! function_exists('translator')) {
 
 if (! function_exists('translator_text')) {
     /**
-     * Получить перевод как ЧИСТЫЙ ТЕКСТ (без HTML)
-     * Безопасно для вывода в любом месте
-     * Использование: {{ translator_text('app', 'key') }}
-     *
-     * @param  string  $category  Категория перевода
-     * @param  string|null  $key  Ключ перевода
-     * @param  array  $replace  Массив замен
-     * @param  string|null  $locale  Локаль
-     * @return string
+     * Get translation as plain text (no HTML)
      */
     function translator_text($category, $key = null, $replace = [], $locale = null): string
     {
@@ -122,15 +150,7 @@ if (! function_exists('translator_text')) {
 
 if (! function_exists('translator_br')) {
     /**
-     * Получить перевод с поддержкой <br> тегов (для заголовков с переносами)
-     * Удаляет все теги кроме <br>, экранирует остальное
-     * Использование: {!! translator_br('app', 'key') !!}
-     *
-     * @param  string  $category  Категория перевода
-     * @param  string|null  $key  Ключ перевода
-     * @param  array  $replace  Массив замен
-     * @param  string|null  $locale  Локаль
-     * @return string
+     * Get translation with <br> tags support
      */
     function translator_br($category, $key = null, $replace = [], $locale = null): string
     {
@@ -144,49 +164,33 @@ if (! function_exists('translator_br')) {
 
 if (! function_exists('translator_html')) {
     /**
-     * Получить перевод как БЕЗОПАСНЫЙ HTML (очищенный через HTMLPurifier)
-     * Для контента с форматированием (жирный, списки, ссылки)
-     * Использование: {!! translator_html('app', 'key') !!}
-     *
-     * @param  string  $category  Категория перевода
-     * @param  string|null  $key  Ключ перевода
-     * @param  array  $replace  Массив замен
-     * @param  string|null  $locale  Локаль
-     * @return string
+     * Get translation as safe HTML
      */
     function translator_html($category, $key = null, $replace = [], $locale = null): string
     {
         $value = translator($category, $key, $replace, $locale);
 
-        // Проверяем доступность HTMLPurifier через функцию clean()
         if (function_exists('clean')) {
             return clean($value);
         }
 
-        // Fallback: strip_tags с разрешёнными тегами
         return strip_tags($value, '<p><br><strong><b><em><i><ul><ol><li><a>');
     }
 }
 
 if (! function_exists('clear_translator_cache')) {
     /**
-     * Очистить кэш переводов
-     * Вызывать при обновлении переводов в админке
-     *
-     * @param  string|null  $category  Категория
-     * @param  string|null  $key  Ключ
+     * Clear translator cache
      */
     function clear_translator_cache(?string $category = null, ?string $key = null): void
     {
         if ($category && $key) {
             Cache::forget("translator.{$category}.{$key}");
         } elseif ($category) {
-            // Очистить все переводы в категории
             SiteTranslation::where('category', $category)->each(function ($translation) use ($category) {
                 Cache::forget("translator.{$category}.{$translation->key}");
             });
         } else {
-            // Очистить все переводы
             SiteTranslation::all()->each(function ($translation) {
                 Cache::forget("translator.{$translation->category}.{$translation->key}");
             });

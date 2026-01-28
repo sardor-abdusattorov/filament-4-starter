@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use AbdulmajeedJamaan\FilamentTranslatableTabs\TranslatableTabs;
+use App\Models\Settings;
 use App\Models\SiteSettings;
 use App\Models\SiteTranslation;
+use App\Observers\SettingsObserver;
 use App\Observers\SiteSettingsObserver;
 use App\Observers\SiteTranslationObserver;
 use App\Policies\ActivityPolicy;
@@ -100,6 +102,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function configureObservers(): void
     {
+        Settings::observe(SettingsObserver::class);
         SiteSettings::observe(SiteSettingsObserver::class);
         SiteTranslation::observe(SiteTranslationObserver::class);
     }

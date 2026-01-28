@@ -3,6 +3,7 @@
 return [
     'label' => [
         'settings' => 'Settings',
+        'main_settings' => 'Main Settings',
         'status' => 'Status',
         'empty' => 'Empty',
         'site_translations_single' => 'Site translation',
@@ -22,6 +23,14 @@ return [
         'show_on_site' => 'Show on site',
         'created_at' => 'Created at',
         'updated_at' => 'Updated at',
+        'tab_seo' => 'SEO',
+        'tab_metrics' => 'Metrics',
+        'seo_title' => 'SEO Title',
+        'seo_description' => 'SEO Description',
+        'seo_keywords' => 'SEO Keywords',
+        'seo_og_image' => 'OG Image',
+        'metrics_yandex' => 'Yandex Metrika',
+        'metrics_google' => 'Google Analytics',
     ],
     'helper' => [
         'unique_translation_identifier' => 'Unique translation identifier',
@@ -30,6 +39,9 @@ return [
         'setting_value_pairs' => 'Key-value pairs for this setting',
         'if_disabled_translation_not_used' => 'If disabled — translation will not be used',
         'if_disabled_setting_not_used' => 'If disabled — setting will not be used',
+        'seo_og_image' => 'Recommended size: 1200x630px. PNG or JPEG format.',
+        'metrics_yandex' => 'Paste your Yandex Metrika tracking code here',
+        'metrics_google' => 'Paste your Google Analytics tracking code here',
     ],
     'status' => [
         'active' => 'Active',
