@@ -1,5 +1,9 @@
 @php
-    use App\Models\Settings;use App\Models\SiteSettings;
+    use App\Models\Settings;
+
+    $locale = app()->getLocale();
+    $seoTitle = settings('seo.title.' . $locale) ?? config('app.name');
+    $seoDescription = settings('seo.description.' . $locale) ?? '';
 @endphp
 
 <head>
@@ -12,16 +16,11 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <title>
-        @yield('title', settings('seo.title')[app()->getLocale()] ?? config('app.name'))
-    </title>
-    <meta property="og:title"
-          content="@yield('title', settings('seo.title')[app()->getLocale()] ?? config('app.name'))">
+    <title>@yield('title', $seoTitle)</title>
+    <meta property="og:title" content="@yield('title', $seoTitle)">
 
-    <meta name="description"
-          content="@yield('meta_description', settings('seo.description')[app()->getLocale()] ?? '')">
-    <meta property="og:description"
-          content="@yield('meta_description', settings('seo.description')[app()->getLocale()] ?? '')">
+    <meta name="description" content="@yield('meta_description', $seoDescription)">
+    <meta property="og:description" content="@yield('meta_description', $seoDescription)">
 
     @php
         $ogImageUrl = trim($__env->yieldContent('og_image'))
