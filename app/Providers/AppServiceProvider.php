@@ -55,7 +55,8 @@ class AppServiceProvider extends ServiceProvider
                     'ru' => __('app.label.ru'),
                     'uz' => __('app.label.uz'),
                     'en' => __('app.label.en'),
-                ]);
+                ])
+                ->visible(outsidePanels: true);
         });
 
         TranslatableTabs::configureUsing(function (TranslatableTabs $component) {
