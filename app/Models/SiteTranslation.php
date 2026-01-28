@@ -19,7 +19,6 @@ class SiteTranslation extends Model
     public $translatable = ['value'];
 
     protected $casts = [
-        'value' => 'array',
         'is_published' => 'boolean',
     ];
 

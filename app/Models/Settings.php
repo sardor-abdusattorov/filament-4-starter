@@ -4,21 +4,49 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Translatable\HasTranslations;
 
 class Settings extends Model
 {
-    use HasTranslations;
-
     protected $table = 'settings';
 
     protected $fillable = ['key', 'value'];
 
-    public $translatable = ['value'];
+    /**
+     * Get the value attribute - decode JSON if it's a valid JSON string
+     */
+    public function getValueAttribute($value)
+    {
+        if ($value === null) {
+            return null;
+        }
 
-    protected $casts = [
-        'value' => 'array',
-    ];
+        $decoded = json_decode($value, true);
+
+        // If it's a valid JSON array/object, return decoded
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return $decoded;
+        }
+
+        // If it was a JSON-encoded string (like "\"text\""), decode it
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $decoded;
+        }
+
+        // Otherwise return as-is
+        return $value;
+    }
+
+    /**
+     * Set the value attribute - encode arrays to JSON, store strings as-is
+     */
+    public function setValueAttribute($value)
+    {
+        if (is_array($value)) {
+            $this->attributes['value'] = json_encode($value, JSON_UNESCAPED_UNICODE);
+        } else {
+            $this->attributes['value'] = $value;
+        }
+    }
 
     public static function get(string $key, mixed $default = null): mixed
     {
@@ -35,10 +63,9 @@ class Settings extends Model
         );
     }
 
-    public static function getOgImage($locale = null)
+    public static function getOgImage()
     {
-        $locale = $locale ?: app()->getLocale();
-        $path = settings('seo.og_image')[$locale] ?? '';
+        $path = settings('seo.og_image');
 
         if (! $path) {
             return null;
