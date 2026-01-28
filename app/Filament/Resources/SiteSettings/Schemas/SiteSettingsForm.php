@@ -25,11 +25,9 @@ class SiteSettingsForm
                             ->required()
                             ->unique(ignoreRecord: true),
 
-                        KeyValue::make('value')
+                        TextInput::make('value')
                             ->label(__('app.label.value'))
-                            ->helperText(__('app.helper.setting_value_pairs'))
-                            ->reorderable()
-                            ->addActionLabel(__('app.label.add_pair')),
+                            ->helperText(__('app.helper.setting_value_pairs')),
 
                         Toggle::make('is_published')
                             ->label(__('app.label.show_on_site'))

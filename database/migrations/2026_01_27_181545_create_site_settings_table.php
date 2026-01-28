@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('site_settings', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->json('value')->nullable();
+            $table->string('value')->nullable();
             $table->boolean('is_published')->default(true);
             $table->timestamps();
         });
