@@ -2,8 +2,8 @@
     <form wire:submit="save">
         {{ $this->form }}
 
-        <div class="mt-10">
-            <x-filament::button type="submit">
+        <div>
+            <x-filament::button type="submit" style="margin-top: 30px">
                 {{ __('filament-panels::resources/pages/edit-record.form.actions.save.label') }}
             </x-filament::button>
         </div>

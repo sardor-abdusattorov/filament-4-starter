@@ -107,7 +107,7 @@ class Settings extends Page implements HasForms
                                     ->label(__('app.label.seo_og_image'))
                                     ->image()
                                     ->imageEditor()
-                                    ->directory('og_images')
+                                    ->directory('images')
                                     ->maxSize(2048)
                                     ->acceptedFileTypes(['image/png', 'image/jpeg'])
                                     ->helperText(__('app.helper.seo_og_image')),
