@@ -1,89 +1,187 @@
-# 🚀 Glow Starter Kit
+# Filament 4 Starter Kit
 
-This is a **Filament v4 Starter Kit** for **Laravel 12**, designed to accelerate the development of Filament-powered applications.
+Стартовый шаблон на **Laravel 12** + **Filament 4** с готовой системой настроек, переводов и SEO.
 
-Preview:
-![](https://raw.githubusercontent.com/ercogx/laravel-filament-starter-kit/main/preview-white.png)
-Dark Mode:
-![](https://raw.githubusercontent.com/ercogx/laravel-filament-starter-kit/main/preview.png)
+![Preview](https://raw.githubusercontent.com/ercogx/laravel-filament-starter-kit/main/preview-white.png)
 
-## Compatibility
+## Возможности
 
-| Starter Kit                                                            | Filament Version                                        |
-|------------------------------------------------------------------------|---------------------------------------------------------|
-| [1.x](https://github.com/Ercogx/laravel-filament-starter-kit/tree/1.x) | [3.x](https://github.com/filamentphp/filament/tree/3.x) |
-| **2.x**                                                                | **4.x**                                                 |
+### Админ-панель (Filament)
+- **Shield** — управление ролями и правами доступа
+- **Breezy** — страница профиля пользователя
+- **Logger** — логирование действий пользователей
+- **Language Switch** — переключение языков в админке
+- **Translatable Tabs** — удобные табы для мультиязычного контента
 
+### Настройки сайта
+- **Settings** — главные настройки (SEO, метрики)
+- **SiteSettings** — произвольные key-value настройки
+- **SiteTranslations** — переводы из базы данных
 
-## 📦 Installation
+### Готовые хелперы
+```php
+// Получить настройку
+settings('seo.title.ru');
+settings('metrics.yandex');
 
-You need the Laravel Installer if it is not yet installed.
+// Произвольные настройки
+site_setting('contact_phone');
 
-```bash
-composer global require laravel/installer
+// Переводы из БД
+translator('home.welcome');
+translator('buttons', 'submit');
 ```
 
-Now you can create a new project using the Laravel Filament Starter Kit.
+### Кеширование
+- Все данные кешируются автоматически
+- При изменении в админке кеш очищается через Observers
+- Ручная очистка: `php artisan project:cache`
 
+## Установка
+
+### 1. Создание проекта
 ```bash
-laravel new test-kit --using=ercogx/laravel-filament-starter-kit
+laravel new my-project --using=ercogx/laravel-filament-starter-kit
 ```
 
-> If you want a Filament v3 (not recommended) ```laravel new test-kit --using=ercogx/laravel-filament-starter-kit:1.8.0```
+### 2. Настройка базы данных
+По умолчанию используется SQLite. Для MySQL:
+```bash
+# Обновите .env
+DB_CONNECTION=mysql
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
 
-## ⚙️ Setup
+# Запустите миграции
+php artisan migrate
+```
 
-1️⃣ **Database Configuration**
-
-By default, this starter kit uses **SQLite**. If you’re okay with this, you can skip this step. If you prefer **MySQL**, follow these steps:
-
-- Update your database credentials in `.env`
-- Run migrations: `php artisan migrate`
-- (Optional) delete the existing database file: ```rm database/database.sqlite```
-
-2️⃣ Create Filament Admin User
+### 3. Создание администратора
 ```bash
 php artisan make:filament-user
-```
-
-3️⃣ Assign Super Admin Role
-```bash
 php artisan shield:super-admin --user=1 --panel=admin
-```
-
-4️⃣ Generate Permissions
-```bash
 php artisan shield:generate --all --ignore-existing-policies --panel=admin
 ```
 
-## 🌟Panel Include 
-
-- [Shield](https://filamentphp.com/plugins/bezhansalleh-shield) Access management to your Filament Panel's Resources, Pages & Widgets through spatie/laravel-permission.
-- [Backgrounds](https://filamentphp.com/plugins/swisnl-backgrounds) Beautiful backgrounds for Filament auth pages.
-- [Logger](https://filamentphp.com/plugins/z3d0x-logger) Extensible activity logger for filament that works out-of-the-box.
-- [Nord Theme](https://filamentphp.com/plugins/andreia-bohner-nord-theme) Beautiful Nord theme with subdued palette
-- [Breezy](https://filamentphp.com/plugins/jeffgreco-breezy) My Profile page.
-
-> More will be added when the relevant plugins release support for v4
-
-## 🧑‍💻Development Include
-
-- [barryvdh/laravel-debugbar](https://github.com/barryvdh/laravel-debugbar) The most popular debugging tool for Laravel, providing detailed request and query insights.
-- [larastan/larastan](https://github.com/larastan/larastan) A PHPStan extension for Laravel, configured at level 5 for robust static code analysis.
-- [plannr/laravel-fast-refresh-database](https://github.com/PlannrCrm/laravel-fast-refresh-database) 🚀 Refresh your test databases faster than you've ever seen before
-
-The `composer check` script runs **tests, PHPStan, and Pint** for code quality assurance:
+### 4. Запуск
 ```bash
+composer dev
+```
+Откроется: http://127.0.0.1:8000/admin
+
+## Структура проекта
+
+```
+app/
+├── Filament/
+│   ├── Pages/
+│   │   └── Settings.php          # Страница настроек (SEO, метрики)
+│   └── Resources/
+│       ├── SiteSettings/         # CRUD для произвольных настроек
+│       ├── SiteTranslations/     # CRUD для переводов
+│       └── Users/                # Управление пользователями
+├── Helpers/
+│   └── functions.php             # Хелперы: settings(), translator()
+├── Models/
+│   ├── Settings.php              # Главные настройки
+│   ├── SiteSettings.php          # Произвольные настройки
+│   └── SiteTranslation.php       # Переводы
+└── Observers/                    # Автоочистка кеша
+```
+
+## Использование
+
+### SEO настройки
+В админке: **Settings → SEO**
+- Title (мультиязычный)
+- Description (мультиязычный)
+- Keywords (мультиязычный)
+- OG Image
+
+В шаблонах:
+```blade
+<title>{{ settings('seo.title.' . app()->getLocale()) }}</title>
+<meta name="description" content="{{ settings('seo.description.' . app()->getLocale()) }}">
+```
+
+### Метрики
+В админке: **Settings → Metrics**
+- Yandex Metrika (HTML/JS код)
+- Google Analytics (HTML/JS код)
+
+```blade
+{!! settings('metrics.yandex') !!}
+{!! settings('metrics.google') !!}
+```
+
+### Переводы из БД
+```php
+// Создайте перевод в админке:
+// category: home, key: welcome, value: {"uz": "Salom", "ru": "Привет", "en": "Hello"}
+
+// Используйте в коде:
+translator('home.welcome');              // Привет (текущая локаль)
+translator('home', 'welcome', [], 'en'); // Hello
+translator_text('home.welcome');         // Без HTML тегов
+translator_html('home.welcome');         // Безопасный HTML
+```
+
+### Произвольные настройки
+```php
+// Создайте в админке: name: contact_phone, value: +998 90 123 45 67
+
+site_setting('contact_phone'); // +998 90 123 45 67
+```
+
+## Artisan команды
+
+```bash
+# Пересобрать кеш (включая settings, site_settings, translations)
+php artisan project:cache
+
+# Инициализация проекта
+php artisan project:init
+
+# Обновление проекта
+php artisan project:update
+
+# Проверка кода (pint + tests + phpstan)
 composer check
 ```
 
-## 📜 License
+## Очистка кеша
 
-This project is open-source and licensed under the MIT License.
+Кеш очищается автоматически при изменении данных. Для ручной очистки:
 
-## 💡 Contributing
+```php
+// В коде
+clear_settings_cache();           // Все настройки
+clear_settings_cache('seo.title.ru'); // Конкретный ключ
 
-We welcome contributions! Feel free to open issues, submit PRs, or suggest improvements.
+clear_site_settings_cache();      // Все site_settings
+clear_translator_cache();         // Все переводы
+clear_translator_cache('home');   // Категория
+clear_translator_cache('home', 'welcome'); // Конкретный перевод
+```
 
+```bash
+# Через artisan
+php artisan project:cache
+php artisan cache:clear
+```
 
-### 🚀 Happy Coding with Laravel & Filament! 🎉
+## Зависимости
+
+| Пакет | Описание |
+|-------|----------|
+| filament/filament | Админ-панель |
+| bezhansalleh/filament-shield | Роли и права |
+| jeffgreco13/filament-breezy | Профиль пользователя |
+| jacobtims/filament-logger | Логирование |
+| spatie/laravel-translatable | Мультиязычность |
+| abdulmajeed-jamaan/filament-translatable-tabs | Табы для переводов |
+
+## Лицензия
+
+MIT License
