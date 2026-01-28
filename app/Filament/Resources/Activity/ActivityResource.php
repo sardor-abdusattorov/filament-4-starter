@@ -9,7 +9,10 @@ class ActivityResource extends BaseResource
     /**
      * The resource navigation sort order.
      */
-    protected static ?int $navigationSort = 99;
+    public static function getNavigationSort(): int
+    {
+        return 6;
+    }
 
     /**
      * Get the navigation badge for the resource.
