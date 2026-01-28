@@ -98,8 +98,7 @@ class AdminPanelProvider extends PanelProvider
                         slug: 'profile',
                     )
                     ->enableBrowserSessions(),
-                FilamentLoggerPlugin::make()
-                    ->navigationGroup(fn () => __('app.label.administration')),
+                FilamentLoggerPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,

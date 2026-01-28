@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.group' => 'Sozlamalar',
+    'nav.group' => 'Boshqaruv',
     'nav.log.label' => 'Harakatlar logi',
     'nav.log.icon' => 'heroicon-o-clipboard-document-list',
     'resource.label.log' => 'Harakatlar logi',
