@@ -16,7 +16,7 @@ class Settings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string $view = 'filament.pages.settings';
+    protected string $view = 'filament.pages.settings';
 
     public ?array $data = [];
 
