@@ -8,15 +8,15 @@ use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 
 class Settings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected string $view = 'filament.pages.settings';
+    protected static ?string $slug = 'settings';
 
     public ?array $data = [];
 
@@ -62,10 +62,10 @@ class Settings extends Page implements HasForms
         return $data;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\Tabs::make(__('app.label.settings'))
                     ->persistTabInQueryString()
                     ->schema([
