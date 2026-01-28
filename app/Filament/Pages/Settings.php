@@ -5,7 +5,10 @@ namespace App\Filament\Pages;
 use AbdulmajeedJamaan\FilamentTranslatableTabs\TranslatableTabs;
 use App\Models\Settings as SettingsModel;
 use Filament\Actions\Action;
-use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
@@ -66,28 +69,28 @@ class Settings extends Page implements HasForms
     {
         return $schema
             ->components([
-                Forms\Components\Tabs::make(__('app.label.settings'))
+                Tabs::make(__('app.label.settings'))
                     ->persistTabInQueryString()
                     ->schema([
-                        Forms\Components\Tabs\Tab::make(__('app.label.tab_seo'))
+                        Tabs\Tab::make(__('app.label.tab_seo'))
                             ->schema([
                                 TranslatableTabs::make('seo_translations')
                                     ->schema([
-                                        Forms\Components\TextInput::make('seo.title')
+                                        TextInput::make('seo.title')
                                             ->label(__('app.label.seo_title'))
                                             ->required(),
 
-                                        Forms\Components\Textarea::make('seo.description')
+                                        Textarea::make('seo.description')
                                             ->label(__('app.label.seo_description'))
                                             ->rows(4)
                                             ->required(),
 
-                                        Forms\Components\Textarea::make('seo.keywords')
+                                        Textarea::make('seo.keywords')
                                             ->label(__('app.label.seo_keywords'))
                                             ->rows(4),
                                     ]),
 
-                                Forms\Components\FileUpload::make('seo.og_image')
+                                FileUpload::make('seo.og_image')
                                     ->label(__('app.label.seo_og_image'))
                                     ->image()
                                     ->imageEditor()
@@ -97,14 +100,14 @@ class Settings extends Page implements HasForms
                                     ->helperText(__('app.helper.seo_og_image')),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make(__('app.label.tab_metrics'))
+                        Tabs\Tab::make(__('app.label.tab_metrics'))
                             ->schema([
-                                Forms\Components\Textarea::make('metrics.yandex')
+                                Textarea::make('metrics.yandex')
                                     ->label(__('app.label.metrics_yandex'))
                                     ->rows(6)
                                     ->helperText(__('app.helper.metrics_yandex')),
 
-                                Forms\Components\Textarea::make('metrics.google')
+                                Textarea::make('metrics.google')
                                     ->label(__('app.label.metrics_google'))
                                     ->rows(6)
                                     ->helperText(__('app.helper.metrics_google')),
