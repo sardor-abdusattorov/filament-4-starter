@@ -16,13 +16,19 @@ class Settings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
-
-    protected static ?int $navigationSort = 1;
-
     protected static string $view = 'filament.pages.settings';
 
     public ?array $data = [];
+
+    public static function getNavigationIcon(): string
+    {
+        return 'heroicon-o-cog-6-tooth';
+    }
+
+    public static function getNavigationSort(): int
+    {
+        return 1;
+    }
 
     public static function getNavigationLabel(): string
     {
