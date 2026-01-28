@@ -23,8 +23,6 @@ class Settings extends Page implements HasForms
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'settings';
-
     public ?array $data = [];
 
     public static function getNavigationLabel(): string
