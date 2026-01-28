@@ -79,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationGroup(fn () => __('app.label.administration'))
                     ->navigationSort(5)
-                    ->navigationBadge(),
+                    ->navigationBadge(fn () => (string) \Spatie\Permission\Models\Role::count()),
 
                 AuthDesignerPlugin::make()
                     ->login(fn (AuthPageConfig $config) => $config

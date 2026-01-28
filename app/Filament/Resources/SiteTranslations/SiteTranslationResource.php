@@ -19,7 +19,7 @@ class SiteTranslationResource extends Resource
 {
     protected static ?string $model = SiteTranslation::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLanguage;
 
     public static function getNavigationGroup(): ?string
     {

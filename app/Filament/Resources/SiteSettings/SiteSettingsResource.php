@@ -19,7 +19,7 @@ class SiteSettingsResource extends Resource
 {
     protected static ?string $model = SiteSettings::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAdjustmentsHorizontal;
 
     public static function getNavigationGroup(): ?string
     {
