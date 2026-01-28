@@ -2,7 +2,7 @@
     <form wire:submit="save">
         {{ $this->form }}
 
-        <div class="mt-6">
+        <div class="mt-10">
             <x-filament::button type="submit">
                 {{ __('filament-panels::resources/pages/edit-record.form.actions.save.label') }}
             </x-filament::button>
