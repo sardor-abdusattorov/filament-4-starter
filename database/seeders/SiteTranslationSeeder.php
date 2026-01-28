@@ -12,7 +12,7 @@ class SiteTranslationSeeder extends Seeder
         $translations = [
             // Home page translations
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'dashboard',
                 'value' => [
                     'ru' => 'Панель управления',
@@ -21,7 +21,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'login',
                 'value' => [
                     'ru' => 'Войти',
@@ -30,7 +30,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'welcome',
                 'value' => [
                     'ru' => 'Добро пожаловать',
@@ -39,7 +39,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'welcome_description',
                 'value' => [
                     'ru' => 'Современная и мощная платформа для управления вашим проектом',
@@ -48,7 +48,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'go_to_dashboard',
                 'value' => [
                     'ru' => 'Перейти в панель',
@@ -57,7 +57,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'get_started',
                 'value' => [
                     'ru' => 'Начать работу',
@@ -66,7 +66,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'feature_secure',
                 'value' => [
                     'ru' => 'Безопасность',
@@ -75,7 +75,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'feature_secure_desc',
                 'value' => [
                     'ru' => 'Надёжная защита данных и контроль доступа',
@@ -84,7 +84,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'feature_fast',
                 'value' => [
                     'ru' => 'Производительность',
@@ -93,7 +93,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'feature_fast_desc',
                 'value' => [
                     'ru' => 'Быстрая работа и оптимизированный код',
@@ -102,7 +102,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'feature_multilang',
                 'value' => [
                     'ru' => 'Мультиязычность',
@@ -111,7 +111,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'feature_multilang_desc',
                 'value' => [
                     'ru' => 'Поддержка нескольких языков из коробки',
@@ -120,7 +120,7 @@ class SiteTranslationSeeder extends Seeder
                 ],
             ],
             [
-                'category' => 'home',
+                'category' => 'app',
                 'key' => 'all_rights_reserved',
                 'value' => [
                     'ru' => 'Все права защищены',

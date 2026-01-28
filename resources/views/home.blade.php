@@ -15,12 +15,12 @@
                         @auth
                             <a href="{{ url('/admin') }}"
                                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
-                                {{ translator('home.dashboard') }}
+                                {{ translator('app.dashboard') }}
                             </a>
                         @else
                             <a href="{{ route('filament.admin.auth.login') }}"
                                class="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                                {{ translator('home.login') }}
+                                {{ translator('app.login') }}
                             </a>
                         @endauth
                     </div>
@@ -42,11 +42,11 @@
 
                 <!-- Hero Text -->
                 <h1 class="text-4xl md:text-5xl font-bold text-slate-800 dark:text-white mb-4">
-                    {{ translator('home.welcome') }}
+                    {{ translator('app.welcome') }}
                 </h1>
 
                 <p class="text-lg text-slate-600 dark:text-slate-300 mb-8">
-                    {{ translator('home.welcome_description') }}
+                    {{ translator('app.welcome_description') }}
                 </p>
 
                 <!-- CTA Buttons -->
@@ -54,12 +54,12 @@
                     @auth
                         <a href="{{ url('/admin') }}"
                            class="px-6 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-md hover:shadow-lg">
-                            {{ translator('home.go_to_dashboard') }}
+                            {{ translator('app.go_to_dashboard') }}
                         </a>
                     @else
                         <a href="{{ route('filament.admin.auth.login') }}"
                            class="px-6 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-md hover:shadow-lg">
-                            {{ translator('home.get_started') }}
+                            {{ translator('app.get_started') }}
                         </a>
                     @endauth
                 </div>
@@ -72,8 +72,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('home.feature_secure') }}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('home.feature_secure_desc') }}</p>
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('app.feature_secure') }}</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('app.feature_secure_desc') }}</p>
                     </div>
 
                     <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
@@ -82,8 +82,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('home.feature_fast') }}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('home.feature_fast_desc') }}</p>
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('app.feature_fast') }}</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('app.feature_fast_desc') }}</p>
                     </div>
 
                     <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
@@ -92,8 +92,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('home.feature_multilang') }}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('home.feature_multilang_desc') }}</p>
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('app.feature_multilang') }}</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('app.feature_multilang_desc') }}</p>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
         <!-- Footer -->
         <footer class="py-6 px-6">
             <div class="max-w-6xl mx-auto text-center text-sm text-slate-500 dark:text-slate-400">
-                &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. {{ translator('home.all_rights_reserved') }}
+                &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. {{ translator('app.all_rights_reserved') }}
             </div>
         </footer>
     </body>
