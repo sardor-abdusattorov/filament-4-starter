@@ -9,11 +9,12 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Schemas\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Textarea;
-use Filament\Schemas\Components\TextInput;
 use Filament\Schemas\Schema;
+
 
 class Settings extends Page implements HasForms
 {
@@ -52,6 +53,14 @@ class Settings extends Page implements HasForms
     {
         $this->form->fill($this->getSettingsData());
     }
+
+    protected function getForms(): array
+    {
+        return [
+            'form',
+        ];
+    }
+
 
     protected function getSettingsData(): array
     {
