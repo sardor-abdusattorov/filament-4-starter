@@ -60,7 +60,6 @@ class AdminPanelProvider extends PanelProvider
                     ->label(fn () => __('app.label.administration')),
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->sidebarWidth('16rem')
             ->maxContentWidth(Width::Full)
             ->unsavedChangesAlerts()
             ->databaseTransactions()
