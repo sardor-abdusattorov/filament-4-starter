@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Translatable\HasTranslations;
 
 class Settings extends Model
 {
+    use HasTranslations;
+
     protected $table = 'settings';
 
     protected $fillable = ['key', 'value'];
+
+    public $translatable = ['value'];
 
     protected $casts = [
         'value' => 'array',
