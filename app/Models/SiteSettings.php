@@ -4,20 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Translatable\HasTranslations;
 
-class SiteTranslation extends Model
+class SiteSettings extends Model
 {
-    use HasTranslations;
-
     public const STATUS_PUBLISHED = true;
     public const STATUS_UNPUBLISHED = false;
 
-    protected $table = 'site_translations';
+    protected $table = 'site_settings';
 
-    protected $fillable = ['category', 'key', 'value', 'is_published'];
-
-    public $translatable = ['value'];
+    protected $fillable = ['name', 'value', 'is_published'];
 
     protected $casts = [
         'value' => 'array',
@@ -34,12 +29,12 @@ class SiteTranslation extends Model
 
     protected static function booted(): void
     {
-        static::saved(function (SiteTranslation $translation) {
-            Cache::forget("translator.{$translation->category}.{$translation->key}");
+        static::saved(function (SiteSettings $setting) {
+            Cache::forget("site_setting.{$setting->name}");
         });
 
-        static::deleted(function (SiteTranslation $translation) {
-            Cache::forget("translator.{$translation->category}.{$translation->key}");
+        static::deleted(function (SiteSettings $setting) {
+            Cache::forget("site_setting.{$setting->name}");
         });
     }
 }
