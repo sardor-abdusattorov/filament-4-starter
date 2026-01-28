@@ -21,19 +21,9 @@ class SiteTranslationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function form(Schema $schema): Schema
-    {
-        return SiteTranslationForm::configure($schema);
-    }
-
-    public static function table(Table $table): Table
-    {
-        return SiteTranslationsTable::configure($table);
-    }
-
     public static function getNavigationGroup(): ?string
     {
-        return __('app.label.settings');
+        return __('app.label.administration');
     }
 
     public static function getModelLabel(): string
@@ -46,11 +36,24 @@ class SiteTranslationResource extends Resource
         return __('app.label.site_translations_plural');
     }
 
-    protected static ?int $navigationSort = 2;
+    public static function getNavigationSort(): int
+    {
+        return 2;
+    }
 
     public static function getNavigationBadge(): ?string
     {
         return (string) static::$model::count();
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return SiteTranslationForm::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return SiteTranslationsTable::configure($table);
     }
 
     public static function getRelations(): array

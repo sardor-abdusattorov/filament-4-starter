@@ -23,7 +23,31 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administration';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.label.administration');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('app.label.users_single');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('app.label.users_plural');
+    }
+
+    public static function getNavigationSort(): int
+    {
+        return 4;
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::$model::count();
+    }
+
 
     public static function form(Schema $schema): Schema
     {

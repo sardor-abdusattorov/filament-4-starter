@@ -44,7 +44,7 @@ class Settings extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return __('app.label.settings');
+        return __('app.label.administration');
     }
 
     public function getTitle(): string
@@ -81,7 +81,6 @@ class Settings extends Page implements HasForms
         return $schema
             ->components([
                 Tabs::make(__('app.label.settings'))
-                    ->persistTabInQueryString()
                     ->schema([
                         Tabs\Tab::make(__('app.label.tab_seo'))
                             ->schema([

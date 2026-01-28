@@ -2,8 +2,6 @@
 
 Стартовый шаблон на **Laravel 12** + **Filament 4** с готовой системой настроек, переводов и SEO.
 
-![Preview](https://raw.githubusercontent.com/ercogx/laravel-filament-starter-kit/main/preview-white.png)
-
 ## Возможности
 
 ### Админ-панель (Filament)
@@ -181,7 +179,3 @@ php artisan cache:clear
 | jacobtims/filament-logger | Логирование |
 | spatie/laravel-translatable | Мультиязычность |
 | abdulmajeed-jamaan/filament-translatable-tabs | Табы для переводов |
-
-## Лицензия
-
-MIT License

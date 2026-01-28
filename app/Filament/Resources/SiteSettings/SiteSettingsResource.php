@@ -21,19 +21,9 @@ class SiteSettingsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
-    public static function form(Schema $schema): Schema
-    {
-        return SiteSettingsForm::configure($schema);
-    }
-
-    public static function table(Table $table): Table
-    {
-        return SiteSettingsTable::configure($table);
-    }
-
     public static function getNavigationGroup(): ?string
     {
-        return __('app.label.settings');
+        return __('app.label.administration');
     }
 
     public static function getModelLabel(): string
@@ -46,11 +36,25 @@ class SiteSettingsResource extends Resource
         return __('app.label.site_settings_plural');
     }
 
-    protected static ?int $navigationSort = 3;
+    public static function getNavigationSort(): int
+    {
+        return 3;
+    }
 
     public static function getNavigationBadge(): ?string
     {
         return (string) static::$model::count();
+    }
+
+
+    public static function form(Schema $schema): Schema
+    {
+        return SiteSettingsForm::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return SiteSettingsTable::configure($table);
     }
 
     public static function getRelations(): array

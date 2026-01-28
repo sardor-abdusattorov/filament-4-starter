@@ -3,6 +3,11 @@
 return [
     'label' => [
         'settings' => 'Settings',
+        'users_single' => 'User',
+        'users_plural' => 'Users',
+        'resources' => 'Resources',
+        'administration' => 'Administration',
+        'go_to_site' => 'Go to site',
         'main_settings' => 'Main Settings',
         'status' => 'Status',
         'empty' => 'Empty',

@@ -13,6 +13,8 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -43,6 +45,20 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
+            ->navigationItems([
+                NavigationItem::make()
+                    ->label(fn () => __('app.label.go_to_site'))
+                    ->url(config('app.url'), shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-globe-alt')
+                    ->sort(2),
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label(fn () => __('app.label.resources')),
+
+                NavigationGroup::make()
+                    ->label(fn () => __('app.label.administration')),
+            ])
             ->sidebarCollapsibleOnDesktop()
             ->sidebarWidth('16rem')
             ->maxContentWidth(Width::Full)
@@ -67,7 +83,11 @@ class AdminPanelProvider extends PanelProvider
                 LightSwitchPlugin::make()
                     ->position(Alignment::BottomCenter),
 
-                FilamentShieldPlugin::make(),
+                FilamentShieldPlugin::make()
+                    ->navigationGroup(fn () => __('app.label.administration'))
+                    ->navigationSort(5)
+                    ->navigationBadge(),
+
                 AuthDesignerPlugin::make()
                     ->login(fn (AuthPageConfig $config) => $config
                         ->media(asset('/images/background.jpeg'))
