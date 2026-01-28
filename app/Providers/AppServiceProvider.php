@@ -11,6 +11,7 @@ use App\Observers\SiteSettingsObserver;
 use App\Observers\SiteTranslationObserver;
 use App\Policies\ActivityPolicy;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
+use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Table;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -21,7 +22,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Activitylog\Models\Activity;
-
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -47,6 +47,16 @@ class AppServiceProvider extends ServiceProvider
         $this->configureLimit();
 
         $this->configureObservers();
+
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $switch
+                ->locales(['ru', 'uz', 'en'])
+                ->labels([
+                    'ru' => __('app.label.ru'),
+                    'uz' => __('app.label.uz'),
+                    'en' => __('app.label.en'),
+                ]);
+        });
 
         TranslatableTabs::configureUsing(function (TranslatableTabs $component) {
             $component

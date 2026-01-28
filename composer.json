@@ -15,6 +15,7 @@
         "php": "^8.2",
         "abdulmajeed-jamaan/filament-translatable-tabs": "^4.0",
         "awcodes/light-switch": "^2.0",
+        "bezhansalleh/filament-language-switch": "*",
         "bezhansalleh/filament-shield": "^4.0.2",
         "caresome/filament-auth-designer": "^2.0",
         "filament/filament": "^4.0",
