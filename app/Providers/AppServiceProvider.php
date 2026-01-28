@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-
 use AbdulmajeedJamaan\FilamentTranslatableTabs\TranslatableTabs;
+use App\Models\SiteSettings;
+use App\Models\SiteTranslation;
+use App\Observers\SiteSettingsObserver;
+use App\Observers\SiteTranslationObserver;
 use App\Policies\ActivityPolicy;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use Filament\Tables\Columns\Column;
@@ -40,6 +43,8 @@ class AppServiceProvider extends ServiceProvider
         $this->configureFilament();
 
         $this->configureLimit();
+
+        $this->configureObservers();
 
         TranslatableTabs::configureUsing(function (TranslatableTabs $component) {
             $component
@@ -91,5 +96,11 @@ class AppServiceProvider extends ServiceProvider
     private function configureLimit(): void
     {
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
+    }
+
+    private function configureObservers(): void
+    {
+        SiteSettings::observe(SiteSettingsObserver::class);
+        SiteTranslation::observe(SiteTranslationObserver::class);
     }
 }

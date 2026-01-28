@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;
 
 class SiteTranslation extends Model
@@ -30,16 +29,5 @@ class SiteTranslation extends Model
             self::STATUS_PUBLISHED => __('app.status.published'),
             self::STATUS_UNPUBLISHED => __('app.status.unpublished'),
         ];
-    }
-
-    protected static function booted(): void
-    {
-        static::saved(function (SiteTranslation $translation) {
-            Cache::forget("translator.{$translation->category}.{$translation->key}");
-        });
-
-        static::deleted(function (SiteTranslation $translation) {
-            Cache::forget("translator.{$translation->category}.{$translation->key}");
-        });
     }
 }
