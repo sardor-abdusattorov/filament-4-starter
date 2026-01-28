@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'greeting' => [
+        'morning' => 'Доброе утро',
+        'afternoon' => 'Добрый день',
+        'evening' => 'Добрый вечер',
+        'night' => 'Доброй ночи',
+        'welcome' => 'Добро пожаловать',
+        'sign_out' => 'Выйти',
+    ],
     'label' => [
         'settings' => 'Настройки',
         'users_single' => 'Пользователь',

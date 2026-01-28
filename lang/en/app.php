@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'greeting' => [
+        'morning' => 'Good morning',
+        'afternoon' => 'Good afternoon',
+        'evening' => 'Good evening',
+        'night' => 'Good night',
+        'welcome' => 'Welcome',
+        'sign_out' => 'Sign out',
+    ],
     'label' => [
         'settings' => 'Settings',
         'users_single' => 'User',

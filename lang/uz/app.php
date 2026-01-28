@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'greeting' => [
+        'morning' => 'Xayrli tong',
+        'afternoon' => 'Xayrli kun',
+        'evening' => 'Xayrli kech',
+        'night' => 'Xayrli tun',
+        'welcome' => 'Xush kelibsiz',
+        'sign_out' => 'Chiqish',
+    ],
     'label' => [
         'settings' => 'Sozlamalar',
         'users_single' => 'Foydalanuvchi',
