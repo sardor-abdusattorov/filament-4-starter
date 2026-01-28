@@ -25,4 +25,5 @@ class SiteSettings extends Model
             self::STATUS_UNPUBLISHED => __('app.status.unpublished'),
         ];
     }
+
 }
