@@ -56,7 +56,6 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                     ->label(fn () => __('app.label.administration')),
             ])
-            ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(Width::Full)
             ->unsavedChangesAlerts()
             ->databaseTransactions()

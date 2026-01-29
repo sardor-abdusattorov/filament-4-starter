@@ -54,6 +54,9 @@ class UiSwitcherPlugin implements Plugin
         // Register colors dynamically based on user settings
         $this->registerUserColors();
 
+        // Apply layout based on user settings
+        $this->applyUserLayout($panel);
+
         // Register Google Fonts in the head
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
@@ -71,6 +74,24 @@ class UiSwitcherPlugin implements Plugin
             PanelsRenderHook::BODY_END,
             fn (): string => $this->getInitScript(),
         );
+    }
+
+    protected function applyUserLayout(Panel $panel): void
+    {
+        $user = Auth::user();
+        if (! $user instanceof User) {
+            return;
+        }
+
+        $settings = $user->getMergedUiSettings();
+        $layout = $settings['layout'] ?? 'sidebar_collapsible';
+
+        match ($layout) {
+            'topbar' => $panel->topNavigation(),
+            'sidebar_hidden' => $panel->sidebarFullyCollapsibleOnDesktop(),
+            'sidebar_collapsible' => $panel->sidebarCollapsibleOnDesktop(),
+            default => null, // sidebar - default, no method needed
+        };
     }
 
     protected function registerUserColors(): void

@@ -35,6 +35,8 @@ return [
     */
     'layouts' => [
         'sidebar',
+        'sidebar_collapsible',
+        'sidebar_hidden',
         'topbar',
     ],
 
@@ -46,7 +48,7 @@ return [
     'defaults' => [
         'theme' => 'system', // light, dark, system
         'primary_color' => 'blue',
-        'layout' => 'sidebar',
+        'layout' => 'sidebar_collapsible',
         'font_family' => 'Inter',
         'font_size' => 16,
     ],
