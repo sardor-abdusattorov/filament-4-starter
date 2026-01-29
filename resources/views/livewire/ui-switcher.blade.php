@@ -1,7 +1,9 @@
 <div
     x-data="{
         open: @entangle('isOpen'),
+        currentTheme: '{{ $theme }}',
         applyTheme(theme) {
+            this.currentTheme = theme;
             const html = document.documentElement;
             if (theme === 'dark') {
                 html.classList.add('dark');
@@ -73,12 +75,10 @@
                             <button
                                 x-on:click="applyTheme('{{ $mode }}'); $wire.setTheme('{{ $mode }}')"
                                 type="button"
-                                @class([
-                                    'flex-1 flex items-center justify-center p-2 rounded-md transition',
-                                    'bg-white dark:bg-gray-700 shadow-sm' => $theme === $mode,
-                                ])
+                                :class="currentTheme === '{{ $mode }}' ? 'bg-white dark:bg-gray-700 shadow-sm' : ''"
+                                class="flex-1 flex items-center justify-center p-2 rounded-md transition"
                             >
-                                <x-filament::icon :icon="$icon" @class(['w-5 h-5', 'text-primary-500' => $theme === $mode, 'text-gray-400' => $theme !== $mode]) />
+                                <x-filament::icon :icon="$icon" x-bind:class="currentTheme === '{{ $mode }}' ? 'text-primary-500' : 'text-gray-400'" class="w-5 h-5" />
                             </button>
                         @endforeach
                     </div>
