@@ -189,21 +189,21 @@
 
 @script
 <script>
-    // Set cookie helper (plain cookie, no encryption)
-    function setCookie(name, value, days = 365) {
+    // Set cookie helper attached to window for accessibility in event handlers
+    window.setUiSwitcherCookie = function(name, value, days = 365) {
         const expires = new Date(Date.now() + days * 864e5).toUTCString();
         document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/; SameSite=Lax';
-    }
+    };
 
     $wire.on('reload-page', () => window.location.reload());
 
     $wire.on('layout-changed', ({ layout }) => {
-        setCookie('filament_layout', layout);
+        window.setUiSwitcherCookie('filament_layout', layout);
         window.location.reload();
     });
 
     $wire.on('reset-settings', ({ layout }) => {
-        setCookie('filament_layout', layout);
+        window.setUiSwitcherCookie('filament_layout', layout);
         localStorage.removeItem('theme');
         window.location.reload();
     });
