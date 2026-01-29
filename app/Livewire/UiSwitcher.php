@@ -94,7 +94,7 @@ class UiSwitcher extends Component
         $this->dispatch('reset-settings', layout: $defaults['layout'] ?? 'sidebar_collapsible');
     }
 
-    protected function saveSetting(string $key, mixed $value): void
+    public function saveSetting(string $key, mixed $value): void
     {
         $user = Auth::user();
         if (! $user) {

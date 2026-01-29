@@ -1,7 +1,7 @@
 <div
     x-data="{
         open: @entangle('isOpen'),
-        currentTheme: '{{ $theme }}',
+        currentTheme: @entangle('theme'),
         applyTheme(theme) {
             this.currentTheme = theme;
             const html = document.documentElement;
@@ -73,7 +73,7 @@
                     <div class="mt-2 flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
                         @foreach(['light' => 'heroicon-o-sun', 'dark' => 'heroicon-o-moon', 'system' => 'heroicon-o-computer-desktop'] as $mode => $icon)
                             <button
-                                x-on:click="applyTheme('{{ $mode }}'); $wire.setTheme('{{ $mode }}')"
+                                x-on:click="applyTheme('{{ $mode }}'); $wire.saveSetting('theme', '{{ $mode }}')"
                                 type="button"
                                 :class="currentTheme === '{{ $mode }}' ? 'bg-white dark:bg-gray-700 shadow-sm' : ''"
                                 class="flex-1 flex items-center justify-center p-2 rounded-md transition"
