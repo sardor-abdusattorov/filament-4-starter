@@ -32,9 +32,15 @@ return [
     |--------------------------------------------------------------------------
     | Available Layouts
     |--------------------------------------------------------------------------
+    | sidebar - default sidebar
+    | sidebar_collapsible - collapsible to icons
+    | sidebar_hidden - fully collapsible (can be hidden)
+    | topbar - top navigation
     */
     'layouts' => [
         'sidebar',
+        'sidebar_collapsible',
+        'sidebar_hidden',
         'topbar',
     ],
 

@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Plugins\UiSwitcherPlugin;
+use App\Models\User;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -58,6 +59,21 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(Width::Full)
+            ->bootUsing(function (Panel $panel) {
+                $user = auth()->user();
+                if (! $user instanceof User) {
+                    return;
+                }
+
+                $layout = $user->getUiSetting('layout', 'sidebar_collapsible');
+
+                match ($layout) {
+                    'topbar' => $panel->topNavigation(),
+                    'sidebar_hidden' => $panel->sidebarFullyCollapsibleOnDesktop(),
+                    'sidebar_collapsible' => $panel->sidebarCollapsibleOnDesktop(),
+                    default => null, // sidebar - default, no changes needed
+                };
+            })
             ->unsavedChangesAlerts()
             ->databaseTransactions()
             ->databaseNotifications()

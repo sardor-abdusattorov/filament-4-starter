@@ -66,29 +66,46 @@
                 {{-- Layout --}}
                 <div>
                     <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('Layout') }}</label>
-                    <div class="mt-2 grid grid-cols-2 gap-3">
-                        @foreach(['sidebar' => 'Sidebar', 'topbar' => 'Topbar'] as $key => $label)
+                    <div class="mt-2 grid grid-cols-2 gap-2">
+                        @php
+                            $layouts = [
+                                'sidebar' => ['label' => 'Sidebar', 'icon' => 'sidebar'],
+                                'sidebar_collapsible' => ['label' => 'Collapsible', 'icon' => 'collapsible'],
+                                'sidebar_hidden' => ['label' => 'Hidden', 'icon' => 'hidden'],
+                                'topbar' => ['label' => 'Topbar', 'icon' => 'topbar'],
+                            ];
+                        @endphp
+                        @foreach($layouts as $key => $data)
                             <button
                                 wire:click="setLayout('{{ $key }}')"
                                 type="button"
                                 @class([
-                                    'flex flex-col items-center p-4 border-2 rounded-lg transition',
+                                    'flex flex-col items-center p-3 border-2 rounded-lg transition',
                                     'border-primary-500 bg-primary-50 dark:bg-primary-950' => $layout === $key,
                                     'border-gray-200 dark:border-gray-700' => $layout !== $key,
                                 ])
                             >
-                                @if($key === 'sidebar')
-                                    <div class="flex w-14 h-10 border border-gray-300 dark:border-gray-600 rounded overflow-hidden">
-                                        <div class="w-4 bg-gray-400 dark:bg-gray-500"></div>
+                                @if($data['icon'] === 'sidebar')
+                                    <div class="flex w-12 h-8 border border-gray-300 dark:border-gray-600 rounded overflow-hidden">
+                                        <div class="w-3 bg-gray-400 dark:bg-gray-500"></div>
+                                        <div class="flex-1 bg-gray-100 dark:bg-gray-800"></div>
+                                    </div>
+                                @elseif($data['icon'] === 'collapsible')
+                                    <div class="flex w-12 h-8 border border-gray-300 dark:border-gray-600 rounded overflow-hidden">
+                                        <div class="w-1.5 bg-gray-400 dark:bg-gray-500"></div>
+                                        <div class="flex-1 bg-gray-100 dark:bg-gray-800"></div>
+                                    </div>
+                                @elseif($data['icon'] === 'hidden')
+                                    <div class="flex w-12 h-8 border border-gray-300 dark:border-gray-600 rounded overflow-hidden">
                                         <div class="flex-1 bg-gray-100 dark:bg-gray-800"></div>
                                     </div>
                                 @else
-                                    <div class="flex flex-col w-14 h-10 border border-gray-300 dark:border-gray-600 rounded overflow-hidden">
-                                        <div class="h-2.5 bg-gray-400 dark:bg-gray-500"></div>
+                                    <div class="flex flex-col w-12 h-8 border border-gray-300 dark:border-gray-600 rounded overflow-hidden">
+                                        <div class="h-2 bg-gray-400 dark:bg-gray-500"></div>
                                         <div class="flex-1 bg-gray-100 dark:bg-gray-800"></div>
                                     </div>
                                 @endif
-                                <span class="mt-2 text-xs text-gray-600 dark:text-gray-400">{{ $label }}</span>
+                                <span class="mt-1.5 text-[10px] text-gray-600 dark:text-gray-400">{{ $data['label'] }}</span>
                             </button>
                         @endforeach
                     </div>
