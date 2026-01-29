@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Plugins\UiSwitcherPlugin;
-use App\Http\Middleware\ApplyUiSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -107,7 +106,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                ApplyUiSettings::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css');
     }
