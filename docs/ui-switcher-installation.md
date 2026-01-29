@@ -9,6 +9,7 @@
 ```
 app/Filament/Plugins/UiSwitcherPlugin.php
 app/Livewire/UiSwitcher.php
+app/Traits/HasUiSettings.php
 config/ui-switcher.php
 resources/views/livewire/ui-switcher.blade.php
 database/migrations/2026_01_29_000001_add_ui_settings_to_users_table.php
@@ -16,63 +17,80 @@ database/migrations/2026_01_29_000001_add_ui_settings_to_users_table.php
 
 ### 2. Обновите модель User
 
-Добавьте в `app/Models/User.php`:
+Добавьте trait и cast в `app/Models/User.php`:
 
 ```php
-protected $casts = [
-    // ... другие casts
-    'ui_settings' => 'array',
-];
+use App\Traits\HasUiSettings;
 
-public function getUiSetting(string $key, mixed $default = null): mixed
+class User extends Authenticatable
 {
-    return data_get($this->ui_settings, $key, $default);
-}
+    use HasUiSettings;
 
-public function setUiSetting(string $key, mixed $value): void
-{
-    $settings = $this->ui_settings ?? [];
-    data_set($settings, $key, $value);
-    $this->ui_settings = $settings;
-    $this->save();
-}
-
-public static function getDefaultUiSettings(): array
-{
-    return config('ui-switcher.defaults', [
-        'theme' => 'system',
-        'primary_color' => 'blue',
-        'layout' => 'sidebar',
-        'font_family' => 'Inter',
-        'font_size' => 16,
-    ]);
-}
-
-public function getMergedUiSettings(): array
-{
-    return array_merge(static::getDefaultUiSettings(), $this->ui_settings ?? []);
+    protected $casts = [
+        // ... другие casts
+        'ui_settings' => 'array',
+    ];
 }
 ```
 
-### 3. Зарегистрируйте плагин
+### 3. Зарегистрируйте плагин и настройте layout
 
 В `app/Providers/Filament/AdminPanelProvider.php`:
 
 ```php
 use App\Filament\Plugins\UiSwitcherPlugin;
+use Filament\Enums\ThemeMode;
 
 public function panel(Panel $panel): Panel
 {
-    return $panel
-        // ...
+    $panel = $panel
+        ->default()
+        ->id('admin')
+        ->path('admin')
+        ->darkMode(true)
+        ->defaultThemeMode(ThemeMode::System)
+        // ... другие настройки
         ->plugins([
             UiSwitcherPlugin::make(),
             // другие плагины
         ]);
+
+    // Apply layout from cookie (set by UI Switcher)
+    $layout = $_COOKIE['filament_layout'] ?? 'sidebar_collapsible';
+
+    return match ($layout) {
+        'topbar' => $panel->topNavigation(),
+        'sidebar_hidden' => $panel->sidebarFullyCollapsibleOnDesktop(),
+        'sidebar_collapsible' => $panel->sidebarCollapsibleOnDesktop(),
+        default => $panel, // 'sidebar' - default, no modification
+    };
 }
 ```
 
-### 4. Добавьте source в theme.css
+### 4. Добавьте переводы
+
+В языковые файлы (`lang/en/app.php`, `lang/ru/app.php`, etc.):
+
+```php
+'ui_switcher' => [
+    'title' => 'UI Settings',
+    'settings' => 'Settings',
+    'mode' => 'Mode',
+    'layout' => 'Layout',
+    'color' => 'Color',
+    'font' => 'Font',
+    'size' => 'Size',
+    'reset' => 'Reset to defaults',
+    'layouts' => [
+        'sidebar' => 'Sidebar',
+        'sidebar_collapsible' => 'Collapsible',
+        'sidebar_hidden' => 'Hidden',
+        'topbar' => 'Topbar',
+    ],
+],
+```
+
+### 5. Добавьте source в theme.css
 
 В `resources/css/filament/admin/theme.css`:
 
@@ -80,13 +98,13 @@ public function panel(Panel $panel): Panel
 @source '../../../../resources/views/livewire/**/*';
 ```
 
-### 5. Запустите миграцию
+### 6. Запустите миграцию
 
 ```bash
 php artisan migrate
 ```
 
-### 6. Пересоберите ассеты
+### 7. Пересоберите ассеты
 
 ```bash
 npm run build
@@ -101,11 +119,11 @@ php artisan optimize:clear
 return [
     'colors' => ['blue', 'green', 'red', ...],
     'fonts' => ['Inter', 'Poppins', ...],
-    'layouts' => ['sidebar', 'topbar'],
+    'layouts' => ['sidebar', 'sidebar_collapsible', 'sidebar_hidden', 'topbar'],
     'defaults' => [
         'theme' => 'system',
         'primary_color' => 'blue',
-        'layout' => 'sidebar',
+        'layout' => 'sidebar_collapsible',
         'font_family' => 'Inter',
         'font_size' => 16,
     ],
@@ -115,9 +133,14 @@ return [
 
 ## Возможности
 
-- **Тема:** Light / Dark / System
-- **Layout:** Sidebar / Topbar
+- **Тема:** Light / Dark / System (мгновенное переключение)
+- **Layout:** 4 варианта
+  - Sidebar - обычная боковая панель
+  - Collapsible - сворачиваемая боковая панель
+  - Hidden - полностью скрываемая боковая панель
+  - Topbar - верхняя навигация
 - **Цвет:** 22 цвета Tailwind
 - **Шрифт:** 6 Google Fonts
 - **Размер шрифта:** 12-20px
 - Настройки сохраняются в БД для каждого пользователя
+- Layout сохраняется в cookie для применения до авторизации
