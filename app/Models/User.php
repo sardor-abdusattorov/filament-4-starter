@@ -57,14 +57,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
      */
     public static function getDefaultUiSettings(): array
     {
-        return [
-            'theme' => 'system', // light, dark, system
+        return config('ui-switcher.defaults', [
+            'theme' => 'system',
             'primary_color' => 'blue',
-            'layout' => 'sidebar', // sidebar, topbar
-            'sidebar_collapsed' => false,
+            'layout' => 'sidebar',
             'font_family' => 'Inter',
             'font_size' => 16,
-        ];
+        ]);
     }
 
     /**
