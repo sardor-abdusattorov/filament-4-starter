@@ -4,7 +4,7 @@
         @click="open = !open"
         type="button"
         class="flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-gray-400 dark:hover:bg-gray-800 transition"
-        title="{{ __('UI Settings') }}"
+        title="{{ __('app.ui_switcher.title') }}"
     >
         <x-filament::icon icon="heroicon-o-paint-brush" class="w-5 h-5" />
     </button>
@@ -36,7 +36,7 @@
         >
             {{-- Header --}}
             <div class="sticky top-0 flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="font-semibold text-gray-900 dark:text-white">{{ __('Settings') }}</h2>
+                <h2 class="font-semibold text-gray-900 dark:text-white">{{ __('app.ui_switcher.settings') }}</h2>
                 <button @click="open = false" class="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
                     <x-filament::icon icon="heroicon-o-x-mark" class="w-5 h-5" />
                 </button>
@@ -46,7 +46,7 @@
             <div class="p-5 space-y-6">
                 {{-- Theme --}}
                 <div>
-                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('Mode') }}</label>
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('app.ui_switcher.mode') }}</label>
                     <div class="mt-2 flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
                         @foreach(['light' => 'heroicon-o-sun', 'dark' => 'heroicon-o-moon', 'system' => 'heroicon-o-computer-desktop'] as $mode => $icon)
                             <button
@@ -65,14 +65,14 @@
 
                 {{-- Layout --}}
                 <div>
-                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('Layout') }}</label>
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('app.ui_switcher.layout') }}</label>
                     <div class="mt-2 grid grid-cols-2 gap-3">
                         @php
                             $layouts = [
-                                'sidebar' => 'Sidebar',
-                                'sidebar_collapsible' => 'Collapsible',
-                                'sidebar_hidden' => 'Hidden',
-                                'topbar' => 'Topbar',
+                                'sidebar' => __('app.ui_switcher.layouts.sidebar'),
+                                'sidebar_collapsible' => __('app.ui_switcher.layouts.sidebar_collapsible'),
+                                'sidebar_hidden' => __('app.ui_switcher.layouts.sidebar_hidden'),
+                                'topbar' => __('app.ui_switcher.layouts.topbar'),
                             ];
                         @endphp
                         @foreach($layouts as $key => $label)
@@ -116,7 +116,7 @@
 
                 {{-- Color --}}
                 <div>
-                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('Color') }}</label>
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('app.ui_switcher.color') }}</label>
                     <div class="mt-2 flex flex-wrap gap-2">
                         @php
                             $hex = ['slate'=>'#64748b','gray'=>'#6b7280','zinc'=>'#71717a','neutral'=>'#737373','stone'=>'#78716c','red'=>'#ef4444','orange'=>'#f97316','amber'=>'#f59e0b','yellow'=>'#eab308','lime'=>'#84cc16','green'=>'#22c55e','emerald'=>'#10b981','teal'=>'#14b8a6','cyan'=>'#06b6d4','sky'=>'#0ea5e9','blue'=>'#3b82f6','indigo'=>'#6366f1','violet'=>'#8b5cf6','purple'=>'#a855f7','fuchsia'=>'#d946ef','pink'=>'#ec4899','rose'=>'#f43f5e'];
@@ -139,7 +139,7 @@
 
                 {{-- Font --}}
                 <div>
-                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('Font') }}</label>
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('app.ui_switcher.font') }}</label>
                     <div class="mt-2 grid grid-cols-2 gap-2">
                         @foreach($fonts as $font)
                             <button
@@ -162,7 +162,7 @@
                 {{-- Font Size --}}
                 <div>
                     <div class="flex items-center justify-between">
-                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('Size') }}</label>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('app.ui_switcher.size') }}</label>
                         <span class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $fontSize }}px</span>
                     </div>
                     <input
@@ -180,7 +180,7 @@
                     type="button"
                     class="w-full py-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition"
                 >
-                    {{ __('Reset to defaults') }}
+                    {{ __('app.ui_switcher.reset') }}
                 </button>
             </div>
         </div>
@@ -189,7 +189,24 @@
 
 @script
 <script>
+    // Set cookie helper (plain cookie, no encryption)
+    function setCookie(name, value, days = 365) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/; SameSite=Lax';
+    }
+
     $wire.on('reload-page', () => window.location.reload());
+
+    $wire.on('layout-changed', ({ layout }) => {
+        setCookie('filament_layout', layout);
+        window.location.reload();
+    });
+
+    $wire.on('reset-settings', ({ layout }) => {
+        setCookie('filament_layout', layout);
+        localStorage.removeItem('theme');
+        window.location.reload();
+    });
 
     $wire.on('theme-changed', ({ theme }) => {
         const html = document.documentElement;

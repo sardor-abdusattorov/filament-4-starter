@@ -54,9 +54,6 @@ class UiSwitcherPlugin implements Plugin
         // Register colors dynamically based on user settings
         $this->registerUserColors();
 
-        // Apply layout based on user settings
-        $this->applyUserLayout($panel);
-
         // Register Google Fonts in the head
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
@@ -74,24 +71,6 @@ class UiSwitcherPlugin implements Plugin
             PanelsRenderHook::BODY_END,
             fn (): string => $this->getInitScript(),
         );
-    }
-
-    protected function applyUserLayout(Panel $panel): void
-    {
-        $user = Auth::user();
-        if (! $user instanceof User) {
-            return;
-        }
-
-        $settings = $user->getMergedUiSettings();
-        $layout = $settings['layout'] ?? 'sidebar_collapsible';
-
-        match ($layout) {
-            'topbar' => $panel->topNavigation(),
-            'sidebar_hidden' => $panel->sidebarFullyCollapsibleOnDesktop(),
-            'sidebar_collapsible' => $panel->sidebarCollapsibleOnDesktop(),
-            default => null, // sidebar - default, no method needed
-        };
     }
 
     protected function registerUserColors(): void
@@ -139,14 +118,46 @@ class UiSwitcherPlugin implements Plugin
             (function() {
                 const settings = {$settingsJson};
 
-                // Apply theme
+                // Helper to set cookie
+                function setCookie(name, value, days = 365) {
+                    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+                    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/; SameSite=Lax';
+                }
+
+                // Helper to get cookie
+                function getCookie(name) {
+                    const value = '; ' + document.cookie;
+                    const parts = value.split('; ' + name + '=');
+                    if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+                    return null;
+                }
+
+                // Sync layout cookie with database settings
+                const currentLayoutCookie = getCookie('filament_layout');
+                if (settings.layout && currentLayoutCookie !== settings.layout) {
+                    setCookie('filament_layout', settings.layout);
+                    // Only reload if cookie was different (first time sync)
+                    if (currentLayoutCookie !== null && currentLayoutCookie !== settings.layout) {
+                        window.location.reload();
+                        return;
+                    }
+                }
+
+                // Apply theme and sync with localStorage
                 if (settings.theme) {
                     const html = document.documentElement;
+                    const currentTheme = localStorage.getItem('theme');
+
+                    // Sync localStorage with database setting
                     if (settings.theme === 'dark') {
                         html.classList.add('dark');
+                        if (currentTheme !== 'dark') localStorage.setItem('theme', 'dark');
                     } else if (settings.theme === 'light') {
                         html.classList.remove('dark');
+                        if (currentTheme !== 'light') localStorage.setItem('theme', 'light');
                     } else {
+                        // System preference
+                        if (currentTheme !== null) localStorage.removeItem('theme');
                         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                             html.classList.add('dark');
                         } else {

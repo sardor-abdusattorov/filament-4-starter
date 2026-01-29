@@ -62,4 +62,20 @@ return [
         'published' => 'Published',
         'unpublished' => 'Unpublished',
     ],
+    'ui_switcher' => [
+        'title' => 'UI Settings',
+        'settings' => 'Settings',
+        'mode' => 'Mode',
+        'layout' => 'Layout',
+        'color' => 'Color',
+        'font' => 'Font',
+        'size' => 'Size',
+        'reset' => 'Reset to defaults',
+        'layouts' => [
+            'sidebar' => 'Sidebar',
+            'sidebar_collapsible' => 'Collapsible',
+            'sidebar_hidden' => 'Hidden',
+            'topbar' => 'Topbar',
+        ],
+    ],
 ];

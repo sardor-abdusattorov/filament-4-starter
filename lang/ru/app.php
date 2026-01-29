@@ -62,4 +62,20 @@ return [
         'published' => 'Опубликован',
         'unpublished' => 'Не опубликован',
     ],
+    'ui_switcher' => [
+        'title' => 'Настройки интерфейса',
+        'settings' => 'Настройки',
+        'mode' => 'Режим',
+        'layout' => 'Макет',
+        'color' => 'Цвет',
+        'font' => 'Шрифт',
+        'size' => 'Размер',
+        'reset' => 'Сбросить настройки',
+        'layouts' => [
+            'sidebar' => 'Боковая панель',
+            'sidebar_collapsible' => 'Сворачиваемая',
+            'sidebar_hidden' => 'Скрытая',
+            'topbar' => 'Верхняя панель',
+        ],
+    ],
 ];

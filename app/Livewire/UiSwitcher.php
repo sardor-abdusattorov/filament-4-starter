@@ -65,7 +65,7 @@ class UiSwitcher extends Component
     {
         $this->layout = $layout;
         $this->saveSetting('layout', $layout);
-        $this->dispatch('reload-page');
+        $this->dispatch('layout-changed', layout: $layout);
     }
 
     public function setFontFamily(string $font): void
@@ -91,7 +91,8 @@ class UiSwitcher extends Component
         $user->ui_settings = null;
         $user->save();
 
-        $this->dispatch('reload-page');
+        $defaults = $user->getDefaultUiSettings();
+        $this->dispatch('reset-settings', layout: $defaults['layout'] ?? 'sidebar_collapsible');
     }
 
     protected function saveSetting(string $key, mixed $value): void

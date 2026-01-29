@@ -62,4 +62,20 @@ return [
         'published' => 'Chop etilgan',
         'unpublished' => 'Chop etilmagan',
     ],
+    'ui_switcher' => [
+        'title' => 'Interfeys sozlamalari',
+        'settings' => 'Sozlamalar',
+        'mode' => 'Rejim',
+        'layout' => 'Tartib',
+        'color' => 'Rang',
+        'font' => 'Shrift',
+        'size' => 'O\'lcham',
+        'reset' => 'Standart holatga qaytarish',
+        'layouts' => [
+            'sidebar' => 'Yon panel',
+            'sidebar_collapsible' => 'Yig\'iladigan',
+            'sidebar_hidden' => 'Yashirin',
+            'topbar' => 'Yuqori panel',
+        ],
+    ],
 ];

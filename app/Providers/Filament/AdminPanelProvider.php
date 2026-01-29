@@ -32,13 +32,14 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        return $panel
+        $panel = $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->authGuard('web')
             ->login()
-            ->defaultThemeMode(ThemeMode::Light)
+            ->darkMode(true)
+            ->defaultThemeMode(ThemeMode::System)
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -107,5 +108,15 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css');
+
+        // Apply layout from cookie (set by UI Switcher)
+        $layout = $_COOKIE['filament_layout'] ?? 'sidebar_collapsible';
+
+        return match ($layout) {
+            'topbar' => $panel->topNavigation(),
+            'sidebar_hidden' => $panel->sidebarFullyCollapsibleOnDesktop(),
+            'sidebar_collapsible' => $panel->sidebarCollapsibleOnDesktop(),
+            default => $panel, // 'sidebar' - default, no modification
+        };
     }
 }
