@@ -2,8 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use Awcodes\LightSwitch\Enums\Alignment;
-use Awcodes\LightSwitch\LightSwitchPlugin;
+use App\Filament\Plugins\UiSwitcherPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -73,8 +72,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
 
-                LightSwitchPlugin::make()
-                    ->position(Alignment::BottomCenter),
+                UiSwitcherPlugin::make(),
 
                 FilamentShieldPlugin::make()
                     ->navigationGroup(fn () => __('app.label.administration'))
