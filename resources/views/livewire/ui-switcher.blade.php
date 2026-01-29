@@ -1,4 +1,25 @@
-<div x-data="{ open: @entangle('isOpen') }">
+<div
+    x-data="{
+        open: @entangle('isOpen'),
+        applyTheme(theme) {
+            const html = document.documentElement;
+            if (theme === 'dark') {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else if (theme === 'light') {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.removeItem('theme');
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    html.classList.add('dark');
+                } else {
+                    html.classList.remove('dark');
+                }
+            }
+        }
+    }"
+>
     {{-- Toggle Button --}}
     <button
         @click="open = !open"
@@ -50,7 +71,7 @@
                     <div class="mt-2 flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
                         @foreach(['light' => 'heroicon-o-sun', 'dark' => 'heroicon-o-moon', 'system' => 'heroicon-o-computer-desktop'] as $mode => $icon)
                             <button
-                                wire:click="setTheme('{{ $mode }}')"
+                                x-on:click="applyTheme('{{ $mode }}'); $wire.setTheme('{{ $mode }}')"
                                 type="button"
                                 @class([
                                     'flex-1 flex items-center justify-center p-2 rounded-md transition',
@@ -206,25 +227,6 @@
         window.setUiSwitcherCookie('filament_layout', layout);
         localStorage.removeItem('theme');
         window.location.reload();
-    });
-
-    $wire.on('theme-changed', ({ theme }) => {
-        const html = document.documentElement;
-        // Update localStorage for Filament
-        if (theme === 'dark') {
-            html.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else if (theme === 'light') {
-            html.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        } else {
-            localStorage.removeItem('theme');
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                html.classList.add('dark');
-            } else {
-                html.classList.remove('dark');
-            }
-        }
     });
 
     $wire.on('font-size-changed', ({ size }) => {

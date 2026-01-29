@@ -51,7 +51,6 @@ class UiSwitcher extends Component
     {
         $this->theme = $theme;
         $this->saveSetting('theme', $theme);
-        $this->dispatch('theme-changed', theme: $theme);
     }
 
     public function setPrimaryColor(string $color): void
