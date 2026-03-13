@@ -42,31 +42,53 @@ translator('buttons', 'submit');
 laravel new my-project --using=ercogx/laravel-filament-starter-kit
 ```
 
-### 2. Настройка базы данных
-По умолчанию используется SQLite. Для MySQL:
-```bash
-# Обновите .env
-DB_CONNECTION=mysql
-DB_DATABASE=your_database
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+### 2. Запуск через Docker
 
-# Запустите миграции
-php artisan migrate
+```bash
+cp .env.example .env
+
+docker compose up -d --build
+
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate --seed
+docker compose exec app php artisan make:filament-user
+docker compose exec app php artisan shield:super-admin --user=1 --panel=admin
+docker compose exec app php artisan shield:generate --all --ignore-existing-policies --panel=admin
 ```
 
-### 3. Создание администратора
+| Сервис      | URL                      |
+|-------------|--------------------------|
+| Приложение  | http://localhost         |
+| phpMyAdmin  | http://localhost:8080    |
+| Mailpit     | http://localhost:8025    |
+
+**Makefile команды:**
+```bash
+make up           # запустить
+make down         # остановить
+make shell        # войти в контейнер
+make migrate      # запустить миграции
+make fresh        # migrate:fresh --seed
+make test         # запустить тесты
+make cache-clear  # очистить кеш
+```
+
+### 3. Локальный запуск (без Docker)
+```bash
+cp .env.example .env
+# Настройте БД в .env
+php artisan key:generate
+php artisan migrate --seed
+composer dev
+```
+Откроется: http://127.0.0.1:8000/admin
+
+### 4. Создание администратора
 ```bash
 php artisan make:filament-user
 php artisan shield:super-admin --user=1 --panel=admin
 php artisan shield:generate --all --ignore-existing-policies --panel=admin
 ```
-
-### 4. Запуск
-```bash
-composer dev
-```
-Откроется: http://127.0.0.1:8000/admin
 
 ## Структура проекта
 
