@@ -56,6 +56,43 @@ services:
     depends_on:
       - db
 
+  # -------------------------------------------------------
+  # PostgreSQL + pgAdmin (альтернатива MariaDB + phpMyAdmin)
+  # Чтобы использовать:
+  #   1. Раскомментируй pgsql и pgadmin ниже
+  #   2. Закомментируй db и phpmyadmin выше
+  #   3. Поменяй в .env: DB_CONNECTION=pgsql, DB_HOST=pgsql, DB_PORT=5432
+  # -------------------------------------------------------
+  # pgsql:
+  #   image: postgres:17-alpine
+  #   ports:
+  #     - "${FORWARD_DB_PORT:-5432}:5432"
+  #   environment:
+  #     POSTGRES_DB: "${DB_DATABASE}"
+  #     POSTGRES_USER: "${DB_USERNAME}"
+  #     POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  #   volumes:
+  #     - pgsql-data:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+  #     retries: 5
+  #     interval: 10s
+  #     timeout: 5s
+
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   ports:
+  #     - "${PGADMIN_PORT:-5050}:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: "${PGADMIN_EMAIL:-admin@admin.com}"
+  #     PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_PASSWORD:-secret}"
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - pgsql
+
   redis:
     image: redis:alpine
     ports:
@@ -110,6 +147,7 @@ services:
 volumes:
   db-data:
   redis-data:
+  # pgsql-data:
 
 networks:
   app-network:
