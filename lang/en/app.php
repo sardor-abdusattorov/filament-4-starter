@@ -8,6 +8,7 @@ return [
         'night' => 'Good night',
         'welcome' => 'Welcome',
         'sign_out' => 'Sign out',
+        'brother' => 'Hey, my brother!',
     ],
     'label' => [
         'settings' => 'Settings',

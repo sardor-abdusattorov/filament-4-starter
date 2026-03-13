@@ -8,6 +8,7 @@ return [
         'night' => 'Xayrli tun',
         'welcome' => 'Xush kelibsiz',
         'sign_out' => 'Chiqish',
+        'brother' => 'Salom, birodarim!',
     ],
     'label' => [
         'settings' => 'Sozlamalar',
