@@ -1,6 +1,7 @@
 .PHONY: up down build restart shell shell-root logs migrate seed fresh test
 
 up:
+	@[ -f .env ] || cp .env.example .env
 	docker compose up -d
 
 down:
@@ -38,6 +39,9 @@ cache-clear:
 
 composer-install:
 	docker compose exec app composer install
+
+npm-install:
+	npm install
 
 npm-dev:
 	npm run dev
