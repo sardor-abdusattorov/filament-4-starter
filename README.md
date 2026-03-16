@@ -40,7 +40,8 @@ translator('buttons', 'submit');
 ### 1. Требования
 
 - [Docker](https://www.docker.com/) + Docker Compose
-- [Node.js](https://nodejs.org/) (для npm — запускается локально)
+
+> Node.js и Composer установлены внутри Docker контейнера — на сервере ничего дополнительно устанавливать не нужно.
 
 ### 2. Создание проекта
 ```bash
@@ -98,7 +99,7 @@ make dev
 ```bash
 # Первая установка
 make install
-docker compose exec app npm run build
+make npm-build
 
 # В .env:
 APP_ENV=production

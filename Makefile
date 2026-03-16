@@ -5,7 +5,7 @@ install:
 	cp -n .env.example .env
 	docker compose up -d --build
 	docker compose exec app composer install
-	npm install
+	docker compose exec app npm install
 	docker compose exec app php artisan key:generate
 	docker compose exec app php artisan project:init
 	docker compose exec app php artisan make:filament-user
@@ -15,7 +15,7 @@ install:
 # Запуск dev окружения (если уже установлено)
 dev:
 	docker compose up -d
-	npm run dev
+	docker compose exec app npm run dev
 
 up:
 	docker compose up -d
@@ -57,4 +57,7 @@ composer-install:
 	docker compose exec app composer install
 
 npm-dev:
-	npm run dev
+	docker compose exec app npm run dev
+
+npm-build:
+	docker compose exec app npm run build
