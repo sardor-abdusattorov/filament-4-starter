@@ -37,40 +37,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configurePolicies();
-
         $this->configureDB();
-
         $this->configureModels();
-
         $this->configureFilament();
-
         $this->configureLimit();
-
         $this->configureObservers();
-
-        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
-            $switch
-                ->locales(['ru', 'uz', 'en'])
-                ->labels([
-                    'ru' => __('app.label.ru'),
-                    'uz' => __('app.label.uz'),
-                    'en' => __('app.label.en'),
-                ])
-                ->visible(outsidePanels: true);
-        });
-
-        TranslatableTabs::configureUsing(function (TranslatableTabs $component) {
-            $component
-                ->localesLabels([
-                    'ru' => __('app.label.ru'),
-                    'uz' => __('app.label.uz'),
-                    'en' => __('app.label.en'),
-                ])
-                ->locales(['uz', 'ru', 'en'])
-                ->addDirectionByLocale()
-                ->addEmptyBadgeWhenAllFieldsAreEmpty(emptyLabel: __('app.label.empty'))
-                ->addSetActiveTabThatHasValue();
-        });
+        $this->configureLanguageSwitch();
+        $this->configureTranslatableTabs();
     }
 
     private function configurePolicies(): void
@@ -116,5 +89,35 @@ class AppServiceProvider extends ServiceProvider
         Settings::observe(SettingsObserver::class);
         SiteSettings::observe(SiteSettingsObserver::class);
         SiteTranslation::observe(SiteTranslationObserver::class);
+    }
+
+    private function configureLanguageSwitch(): void
+    {
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $switch
+                ->locales(['ru', 'uz', 'en'])
+                ->labels([
+                    'ru' => __('app.label.ru'),
+                    'uz' => __('app.label.uz'),
+                    'en' => __('app.label.en'),
+                ])
+                ->visible(outsidePanels: true);
+        });
+    }
+
+    private function configureTranslatableTabs(): void
+    {
+        TranslatableTabs::configureUsing(function (TranslatableTabs $component) {
+            $component
+                ->localesLabels([
+                    'ru' => __('app.label.ru'),
+                    'uz' => __('app.label.uz'),
+                    'en' => __('app.label.en'),
+                ])
+                ->locales(['uz', 'ru', 'en'])
+                ->addDirectionByLocale()
+                ->addEmptyBadgeWhenAllFieldsAreEmpty(emptyLabel: __('app.label.empty'))
+                ->addSetActiveTabThatHasValue();
+        });
     }
 }
