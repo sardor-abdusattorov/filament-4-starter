@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Traits\HasUiSettings;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
@@ -21,7 +20,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     use HasPanelShield;
     use HasRoles;
-    use HasUiSettings;
     use Notifiable;
 
     protected $hidden = [
@@ -32,7 +30,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'ui_settings' => 'array',
     ];
 
     public function getFilamentAvatarUrl(): ?string

@@ -1,109 +1,93 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <x-head />
-
-    <body class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen flex flex-col">
-        <!-- Header -->
-        <header class="w-full py-4 px-6">
-            <nav class="max-w-6xl mx-auto flex items-center justify-between">
-                <div class="text-xl font-bold text-slate-800 dark:text-white">
-                    {{ config('app.name', 'Laravel') }}
-                </div>
-
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
+        <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6">
+            <nav class="flex items-center justify-end gap-4">
                 @if (Route::has('filament.admin.auth.login'))
-                    <div class="flex items-center gap-4">
-                        @auth
-                            <a href="{{ url('/admin') }}"
-                               class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
-                                {{ translator('app.dashboard') }}
-                            </a>
-                        @else
-                            <a href="{{ route('filament.admin.auth.login') }}"
-                               class="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                                {{ translator('app.login') }}
-                            </a>
-                        @endauth
-                    </div>
+                    @auth
+                        <a href="{{ url('/admin') }}"
+                           class="rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('filament.admin.auth.login') }}"
+                           class="rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                            Log in
+                        </a>
+                    @endauth
                 @endif
             </nav>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 flex items-center justify-center px-6">
-            <div class="text-center max-w-2xl">
-                <!-- Hero Icon -->
-                <div class="mb-8 flex justify-center">
-                    <div class="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        <main class="flex max-w-[335px] w-full lg:max-w-4xl flex-col lg:flex-row gap-6">
+            <div id="docs-card"
+                class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20] lg:pb-10 flex-1">
+                <div class="flex items-center gap-2 sm:items-start">
+                    <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10">
+                        <svg class="size-5 shrink-0 text-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
                         </svg>
                     </div>
-                </div>
-
-                <!-- Hero Text -->
-                <h1 class="text-4xl md:text-5xl font-bold text-slate-800 dark:text-white mb-4">
-                    {{ translator('app.welcome') }}
-                </h1>
-
-                <p class="text-lg text-slate-600 dark:text-slate-300 mb-8">
-                    {{ translator('app.welcome_description') }}
-                </p>
-
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    @auth
-                        <a href="{{ url('/admin') }}"
-                           class="px-6 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-md hover:shadow-lg">
-                            {{ translator('app.go_to_dashboard') }}
-                        </a>
-                    @else
-                        <a href="{{ route('filament.admin.auth.login') }}"
-                           class="px-6 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-md hover:shadow-lg">
-                            {{ translator('app.get_started') }}
-                        </a>
-                    @endauth
-                </div>
-
-                <!-- Features -->
-                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
-                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('app.feature_secure') }}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('app.feature_secure_desc') }}</p>
-                    </div>
-
-                    <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
-                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('app.feature_fast') }}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('app.feature_fast_desc') }}</p>
-                    </div>
-
-                    <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
-                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-2">{{ translator('app.feature_multilang') }}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">{{ translator('app.feature_multilang_desc') }}</p>
+                    <div class="pt-3 sm:pt-5 lg:pt-0">
+                        <h2 class="text-xl font-semibold text-black dark:text-white">Documentation</h2>
+                        <p class="mt-4 text-sm/relaxed text-[#706f6c] dark:text-[#A1A09A]">
+                            Laravel has wonderful documentation covering every aspect of the framework.
+                            Whether you are a newcomer or have prior experience with Laravel, we recommend reading
+                            our documentation from beginning to end.
+                        </p>
                     </div>
                 </div>
+            </div>
+
+            <div class="flex flex-col gap-6 lg:max-w-sm">
+                <a href="https://laracasts.com" target="_blank"
+                    class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
+                    <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10">
+                        <svg class="size-5 shrink-0 text-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                        </svg>
+                    </div>
+                    <div class="pt-3 sm:pt-5">
+                        <h2 class="text-xl font-semibold text-black dark:text-white">Laracasts</h2>
+                        <p class="mt-4 text-sm/relaxed text-[#706f6c] dark:text-[#A1A09A]">
+                            Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development.
+                        </p>
+                    </div>
+                    <svg class="size-6 shrink-0 self-center stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                    </svg>
+                </a>
+
+                <a href="https://filamentphp.com/docs" target="_blank"
+                    class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
+                    <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10">
+                        <svg class="size-5 shrink-0 text-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                        </svg>
+                    </div>
+                    <div class="pt-3 sm:pt-5">
+                        <h2 class="text-xl font-semibold text-black dark:text-white">Filament</h2>
+                        <p class="mt-4 text-sm/relaxed text-[#706f6c] dark:text-[#A1A09A]">
+                            Filament is a collection of beautiful full-stack components for Laravel. The perfect starting point for your next app.
+                        </p>
+                    </div>
+                    <svg class="size-6 shrink-0 self-center stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                    </svg>
+                </a>
             </div>
         </main>
 
-        <!-- Footer -->
-        <footer class="py-6 px-6">
-            <div class="max-w-6xl mx-auto text-center text-sm text-slate-500 dark:text-slate-400">
-                &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. {{ translator('app.all_rights_reserved') }}
-            </div>
+        <footer class="py-16 text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">
+            {{ config('app.name', 'Laravel') }} v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
         </footer>
     </body>
 </html>

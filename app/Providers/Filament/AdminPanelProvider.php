@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Plugins\UiSwitcherPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -19,7 +18,6 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -32,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $panel = $panel
+        return $panel
             ->default()
             ->id('admin')
             ->path('admin')
@@ -40,6 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->darkMode(true)
             ->defaultThemeMode(ThemeMode::System)
+            ->font('Roboto')
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -58,6 +57,7 @@ class AdminPanelProvider extends PanelProvider
                     ->label(fn () => __('app.label.administration')),
             ])
             ->maxContentWidth(Width::Full)
+            ->sidebarCollapsibleOnDesktop()
             ->unsavedChangesAlerts()
             ->databaseTransactions()
             ->databaseNotifications()
@@ -71,8 +71,6 @@ class AdminPanelProvider extends PanelProvider
 
             ])
             ->plugins([
-
-                UiSwitcherPlugin::make(),
 
                 FilamentShieldPlugin::make()
                     ->navigationGroup(fn () => __('app.label.administration'))
@@ -108,15 +106,5 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css');
-
-        // Apply layout from cookie (set by UI Switcher)
-        $layout = $_COOKIE['filament_layout'] ?? 'sidebar_collapsible';
-
-        return match ($layout) {
-            'topbar' => $panel->topNavigation(),
-            'sidebar_hidden' => $panel->sidebarFullyCollapsibleOnDesktop(),
-            'sidebar_collapsible' => $panel->sidebarCollapsibleOnDesktop(),
-            default => $panel, // 'sidebar' - default, no modification
-        };
     }
 }
