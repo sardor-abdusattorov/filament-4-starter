@@ -1,6 +1,5 @@
 .PHONY: up down build restart shell shell-root logs migrate seed fresh test install dev
 
-# Первый запуск — полная установка с нуля
 install:
 	cp -n .env.example .env
 	docker compose up -d --build
@@ -14,7 +13,6 @@ install:
 	@echo ""
 	@echo "✅ Готово! Открывай: http://localhost/admin"
 
-# Запуск dev окружения (если уже установлено)
 dev:
 	docker compose up -d
 	npm run dev
