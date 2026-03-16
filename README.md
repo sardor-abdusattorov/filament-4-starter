@@ -40,8 +40,9 @@ translator('buttons', 'submit');
 ### 1. Требования
 
 - [Docker](https://www.docker.com/) + Docker Compose
+- [Node.js](https://nodejs.org/) — на машине разработчика (для Vite)
 
-> Node.js и Composer установлены внутри Docker контейнера — на сервере ничего дополнительно устанавливать не нужно.
+> Composer установлен внутри Docker контейнера. Node.js нужен только на dev машине и CI/CD — на продакшн сервере не нужен.
 
 ### 2. Создание проекта
 ```bash
@@ -99,7 +100,7 @@ make dev
 ```bash
 # Первая установка
 make install
-make npm-build
+npm run build   # собрать фронтенд (один раз)
 
 # В .env:
 APP_ENV=production
