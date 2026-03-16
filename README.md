@@ -37,7 +37,12 @@ translator('buttons', 'submit');
 
 ## Установка
 
-### 1. Создание проекта
+### 1. Требования
+
+- [Docker](https://www.docker.com/) + Docker Compose
+- [Node.js](https://nodejs.org/) (для npm — запускается локально)
+
+### 2. Создание проекта
 ```bash
 laravel new my-project --using=ercogx/laravel-filament-starter-kit
 ```
