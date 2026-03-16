@@ -1,4 +1,19 @@
-.PHONY: up down build restart shell shell-root logs migrate seed fresh test
+.PHONY: up down build restart shell shell-root logs migrate seed fresh test install dev
+
+# Первый запуск — полная установка с нуля
+install:
+	cp -n .env.example .env
+	docker compose up -d --build
+	docker compose exec app php artisan key:generate
+	docker compose exec app php artisan project:init
+	docker compose exec app php artisan make:filament-user
+	@echo ""
+	@echo "✅ Готово! Открывай: http://localhost/admin"
+
+# Запуск dev окружения (если уже установлено)
+dev:
+	docker compose up -d
+	docker compose exec app npm run dev
 
 up:
 	docker compose up -d
