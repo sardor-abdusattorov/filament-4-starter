@@ -29,26 +29,31 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
         intl \
         opcache
 
-# Install Redis extension
+# Redis
 RUN pecl install redis && docker-php-ext-enable redis
 
-# Install Composer
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create app user
+# Create user
 RUN addgroup -g 1000 app && adduser -u 1000 -G app -s /bin/sh -D app
 
 WORKDIR /var/www/html
 
-# Copy PHP configs (cacheable layer)
-COPY --chown=app:app docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
-COPY --chown=app:app docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+# PHP configs
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
-# Copy composer files and install dependencies (before app code for better caching)
-COPY --chown=app:app composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-progress --no-interaction
+# Copy composer files
+COPY composer.json composer.lock ./
 
-# Copy application code
-COPY --chown=app:app . .
+# Install dependencies WITHOUT scripts
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-progress --no-interaction
+
+# Copy project
+COPY . .
+
+# Generate autoload after code exists
+RUN composer dump-autoload --optimize
 
 USER app
