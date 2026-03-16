@@ -8,7 +8,9 @@ install:
 	npm install
 	docker compose exec app php artisan key:generate
 	docker compose exec app php artisan project:init
-	docker compose exec app php artisan make:filament-user
+	docker compose exec app php artisan project:update
+	docker compose exec app php artisan project:cache
+	docker compose exec app php artisan optimize:clear
 	@echo ""
 	@echo "✅ Готово! Открывай: http://localhost/admin"
 

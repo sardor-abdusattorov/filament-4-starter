@@ -32,10 +32,6 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
 # Install Redis extension
 RUN pecl install redis && docker-php-ext-enable redis
 
-# PHP config
-COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
-COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -43,5 +39,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN addgroup -g 1000 app && adduser -u 1000 -G app -s /bin/sh -D app
 
 WORKDIR /var/www/html
+
+# Copy PHP configs (cacheable layer)
+COPY --chown=app:app docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+COPY --chown=app:app docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
+# Copy composer files and install dependencies (before app code for better caching)
+COPY --chown=app:app composer.json composer.lock ./
+RUN composer install --no-dev --prefer-dist --no-progress --no-interaction
+
+# Copy application code
+COPY --chown=app:app . .
 
 USER app
