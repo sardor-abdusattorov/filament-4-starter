@@ -6,6 +6,7 @@ install:
 	docker compose exec app composer install
 	npm install
 	docker compose exec app php artisan key:generate
+	docker compose exec app php artisan storage:link
 	docker compose exec app php artisan project:init
 	docker compose exec app php artisan project:update
 	docker compose exec app php artisan project:cache
