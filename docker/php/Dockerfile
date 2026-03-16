@@ -41,7 +41,7 @@ RUN addgroup -g 1000 app && adduser -u 1000 -G app -s /bin/sh -D app
 WORKDIR /var/www/html
 
 # PHP configs (production by default)
-COPY docker/php/php.dev.ini /usr/local/etc/php/conf.d/app.ini
+COPY docker/php/php.prod.ini /usr/local/etc/php/conf.d/app.ini
 COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Copy composer files
