@@ -29,19 +29,31 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
         intl \
         opcache
 
-# Install Redis extension
+# Redis
 RUN pecl install redis && docker-php-ext-enable redis
 
-# PHP config
-COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
-COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-
-# Install Composer
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create app user
+# Create user
 RUN addgroup -g 1000 app && adduser -u 1000 -G app -s /bin/sh -D app
 
 WORKDIR /var/www/html
+
+# PHP configs
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
+# Copy composer files
+COPY composer.json composer.lock ./
+
+# Install dependencies WITHOUT scripts
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-progress --no-interaction
+
+# Copy project
+COPY . .
+
+# Generate autoload after code exists
+RUN composer dump-autoload --optimize
 
 USER app

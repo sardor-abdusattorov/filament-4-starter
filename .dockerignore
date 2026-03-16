@@ -1,11 +1,60 @@
-vendor/
-node_modules/
-.git/
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*.sublime-*
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Laravel
+/vendor
+/bootstrap/cache
+/storage/logs/*
+/storage/app/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/framework/cache/*
 .env
-storage/logs/
-storage/framework/cache/
-storage/framework/sessions/
-storage/framework/views/
-bootstrap/cache/
-public/hot
+.env.local
+.env.*.local
+
+# Testing
+/tests
+phpunit.xml
+.phpunit.cache
+pest.xml
+.pest.cache
+
+# Build/CI
+.github
+.gitlab-ci.yml
+.dockerignore
+Dockerfile*
+docker-compose.yml
+
+# OS
+.DS_Store
+Thumbs.db
 *.log
+
+# Other
+.editorconfig
+README.md
+LICENSE.md
+Makefile
+pint.json
+phpstan.neon
+boost.json
+vite.config.js
+postcss.config.js
+tailwind.config.js
