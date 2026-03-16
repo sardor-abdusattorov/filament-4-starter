@@ -46,20 +46,4 @@ ARG APP_ENV=dev
 COPY docker/php/php.${APP_ENV}.ini /usr/local/etc/php/conf.d/app.ini
 COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
-# Copy composer files
-COPY composer.json composer.lock ./
-
-# Install dependencies WITHOUT scripts
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-progress --no-interaction
-
-# Copy project
-COPY . .
-
-# Create required Laravel directories
-RUN mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views storage/logs \
-    && chown -R app:app bootstrap/cache storage
-
-# Generate autoload after code exists (--no-scripts = не запускать artisan во время сборки)
-RUN composer dump-autoload --optimize --no-scripts
-
 USER app
