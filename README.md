@@ -18,44 +18,40 @@
 
 ### Готовые хелперы
 ```php
-// Получить настройку
 settings('seo.title.ru');
 settings('metrics.yandex');
-
-// Произвольные настройки
 site_setting('contact_phone');
-
-// Переводы из БД
 translator('home.welcome');
-translator('buttons', 'submit');
 ```
 
 ### Кеширование
-- Все данные кешируются автоматически
+- Все данные кешируются автоматически через Redis
 - При изменении в админке кеш очищается через Observers
 - Ручная очистка: `php artisan project:cache`
 
+---
+
 ## Установка
 
-### 1. Требования
-
+### Требования
 - [Docker](https://www.docker.com/) + Docker Compose
 - [Node.js](https://nodejs.org/) — на машине разработчика (для Vite)
 
-> Composer установлен внутри Docker контейнера. Node.js нужен только на dev машине и CI/CD — на продакшн сервере не нужен.
+> Composer установлен внутри Docker контейнера — дополнительно устанавливать не нужно.
 
-### 2. Создание проекта
+---
+
+### Шаг 1 — Настройка `.env`
+
 ```bash
-laravel new my-project --using=ercogx/laravel-filament-starter-kit
+cp .env.example .env
 ```
 
-### 2. Настройка `.env`
-
-Перед запуском поправь `.env`:
+Поправь значения:
 ```env
 APP_URL=http://localhost
 
-DB_USERNAME=app          # не использовать root!
+DB_USERNAME=app
 DB_PASSWORD=secret
 DB_ROOT_PASSWORD=secret
 ```
@@ -64,65 +60,81 @@ DB_ROOT_PASSWORD=secret
 
 ---
 
-### 3. Первый запуск — одна команда
+### Шаг 2 — Первый запуск
 
+**Windows:**
+```bash
+install.bat
+```
+
+**Linux / Mac:**
 ```bash
 make install
 ```
 
 Делает всё автоматически:
-- Копирует `.env.example` → `.env` (если ещё нет)
-- Поднимает Docker контейнеры
-- Генерирует `APP_KEY`
-- Запускает `project:init` (миграции, seed, shield, super-admin)
-- Запускает `make:filament-user` — введи имя/email/пароль
-
-| Сервис     | URL                       |
-|------------|---------------------------|
-| Приложение | http://localhost          |
-| phpMyAdmin | http://localhost:8080     |
-| Mailpit    | http://localhost:8025     |
+1. Поднимает Docker контейнеры
+2. Устанавливает PHP зависимости (`composer install`)
+3. Устанавливает JS зависимости (`npm install`)
+4. Генерирует `APP_KEY`
+5. Запускает миграции, seed, shield
+6. Создаёт admin пользователя (введи имя/email/пароль)
 
 ---
 
-### 4. Повторный запуск (уже установлено)
+### Шаг 3 — Запуск Vite (для разработки)
 
+**Windows:**
+```bash
+dev.bat
+```
+
+**Linux / Mac:**
 ```bash
 make dev
 ```
 
-Поднимает контейнеры и запускает Vite (hot reload).
+---
+
+### Ссылки
+
+| Сервис        | URL                            |
+|---------------|--------------------------------|
+| 🌐 Сайт       | http://localhost               |
+| 🔧 Админ      | http://localhost/admin         |
+| 🗄️ phpMyAdmin  | http://localhost:8080          |
+| 📧 Mailpit    | http://localhost:8025          |
 
 ---
 
-### 5. Продакшн
+### Обновление (после изменений в коде)
 
 ```bash
-# Первая установка
-make install
-npm run build   # собрать фронтенд (один раз)
+docker compose exec app php artisan project:update
+npm run build   # только если менялся JS/CSS
+```
 
-# В .env:
+---
+
+### Продакшн
+
+```env
 APP_ENV=production
 APP_DEBUG=false
 ```
 
----
-
-### 6. Обновление (после изменений в коде)
-
 ```bash
-docker compose exec app php artisan project:update
-docker compose exec app npm run build   # если менялся JS/CSS
+make install
+npm run build
 ```
 
 ---
 
-### Все Makefile команды
+### Все команды
 
 ```bash
-make install      # установка с нуля (первый запуск)
-make dev          # запуск dev окружения
+make install      # установка с нуля
+make dev          # запуск dev окружения (контейнеры + Vite)
 make up           # запустить контейнеры
 make down         # остановить контейнеры
 make shell        # войти в контейнер
@@ -130,6 +142,7 @@ make migrate      # запустить миграции
 make fresh        # migrate:fresh --seed
 make test         # запустить тесты
 make cache-clear  # очистить кеш
+make npm-build    # собрать фронтенд
 ```
 
 ---
@@ -144,7 +157,11 @@ php artisan project:init
 php artisan make:filament-user
 composer dev
 ```
-Откроется: http://127.0.0.1:8000/admin
+
+Сайт: http://127.0.0.1:8000
+Админка: http://127.0.0.1:8000/admin
+
+---
 
 ## Структура проекта
 
@@ -166,86 +183,18 @@ app/
 └── Observers/                    # Автоочистка кеша
 ```
 
-## Использование
-
-### SEO настройки
-В админке: **Settings → SEO**
-- Title (мультиязычный)
-- Description (мультиязычный)
-- Keywords (мультиязычный)
-- OG Image
-
-В шаблонах:
-```blade
-<title>{{ settings('seo.title.' . app()->getLocale()) }}</title>
-<meta name="description" content="{{ settings('seo.description.' . app()->getLocale()) }}">
-```
-
-### Метрики
-В админке: **Settings → Metrics**
-- Yandex Metrika (HTML/JS код)
-- Google Analytics (HTML/JS код)
-
-```blade
-{!! settings('metrics.yandex') !!}
-{!! settings('metrics.google') !!}
-```
-
-### Переводы из БД
-```php
-// Создайте перевод в админке:
-// category: home, key: welcome, value: {"uz": "Salom", "ru": "Привет", "en": "Hello"}
-
-// Используйте в коде:
-translator('home.welcome');              // Привет (текущая локаль)
-translator('home', 'welcome', [], 'en'); // Hello
-translator_text('home.welcome');         // Без HTML тегов
-translator_html('home.welcome');         // Безопасный HTML
-```
-
-### Произвольные настройки
-```php
-// Создайте в админке: name: contact_phone, value: +998 90 123 45 67
-
-site_setting('contact_phone'); // +998 90 123 45 67
-```
+---
 
 ## Artisan команды
 
 ```bash
-# Пересобрать кеш (включая settings, site_settings, translations)
-php artisan project:cache
-
-# Инициализация проекта
-php artisan project:init
-
-# Обновление проекта
-php artisan project:update
-
-# Проверка кода (pint + tests + phpstan)
-composer check
+php artisan project:init      # Инициализация (migrate:fresh + seed + shield)
+php artisan project:update    # Обновление (migrate + shield)
+php artisan project:cache     # Пересобрать кеш
+composer check                # pint + tests + phpstan
 ```
 
-## Очистка кеша
-
-Кеш очищается автоматически при изменении данных. Для ручной очистки:
-
-```php
-// В коде
-clear_settings_cache();           // Все настройки
-clear_settings_cache('seo.title.ru'); // Конкретный ключ
-
-clear_site_settings_cache();      // Все site_settings
-clear_translator_cache();         // Все переводы
-clear_translator_cache('home');   // Категория
-clear_translator_cache('home', 'welcome'); // Конкретный перевод
-```
-
-```bash
-# Через artisan
-php artisan project:cache
-php artisan cache:clear
-```
+---
 
 ## Зависимости
 
