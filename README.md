@@ -44,11 +44,7 @@ laravel new my-project --using=ercogx/laravel-filament-starter-kit
 
 ### 2. Настройка `.env`
 
-```bash
-cp .env.example .env
-```
-
-Важные параметры в `.env`:
+Перед запуском поправь `.env`:
 ```env
 APP_URL=http://localhost
 
@@ -61,24 +57,18 @@ DB_ROOT_PASSWORD=secret
 
 ---
 
-### 3. Запуск (Development)
+### 3. Первый запуск — одна команда
 
 ```bash
-# 1. Поднять все контейнеры
-docker compose up -d --build
-
-# 2. Сгенерировать ключ приложения
-docker compose exec app php artisan key:generate
-
-# 3. Инициализация (migrate:fresh + seed + shield + super-admin)
-docker compose exec app php artisan project:init
-
-# 4. Создать администратора
-docker compose exec app php artisan make:filament-user
-
-# 5. Запустить фронтенд (Vite — только для разработки)
-docker compose exec app npm run dev
+make install
 ```
+
+Делает всё автоматически:
+- Копирует `.env.example` → `.env` (если ещё нет)
+- Поднимает Docker контейнеры
+- Генерирует `APP_KEY`
+- Запускает `project:init` (миграции, seed, shield, super-admin)
+- Запускает `make:filament-user` — введи имя/email/пароль
 
 | Сервис     | URL                       |
 |------------|---------------------------|
@@ -88,56 +78,51 @@ docker compose exec app npm run dev
 
 ---
 
-### 4. Запуск (Production)
+### 4. Повторный запуск (уже установлено)
 
 ```bash
-# 1. Поднять контейнеры
-docker compose up -d --build
-
-# 2. Сгенерировать ключ (только первый раз)
-docker compose exec app php artisan key:generate
-
-# 3. Инициализация (только первый раз)
-docker compose exec app php artisan project:init
-
-# 4. Создать администратора (только первый раз)
-docker compose exec app php artisan make:filament-user
-
-# 5. Собрать фронтенд (один раз, npm run dev не нужен!)
-docker compose exec app npm run build
+make dev
 ```
 
-В `.env` для продакшна:
-```env
+Поднимает контейнеры и запускает Vite (hot reload).
+
+---
+
+### 5. Продакшн
+
+```bash
+# Первая установка
+make install
+docker compose exec app npm run build
+
+# В .env:
 APP_ENV=production
 APP_DEBUG=false
 ```
 
 ---
 
-### 5. Обновление проекта (после изменений в коде)
+### 6. Обновление (после изменений в коде)
 
 ```bash
-# Применить новые миграции + обновить shield + очистить кеш
 docker compose exec app php artisan project:update
-
-# Пересобрать фронтенд (если менялись JS/CSS)
-docker compose exec app npm run build
+docker compose exec app npm run build   # если менялся JS/CSS
 ```
 
 ---
 
-### Makefile команды (удобные shortcuts)
+### Все Makefile команды
 
 ```bash
+make install      # установка с нуля (первый запуск)
+make dev          # запуск dev окружения
 make up           # запустить контейнеры
 make down         # остановить контейнеры
-make shell        # войти в контейнер (app user)
+make shell        # войти в контейнер
 make migrate      # запустить миграции
 make fresh        # migrate:fresh --seed
 make test         # запустить тесты
 make cache-clear  # очистить кеш
-make npm-dev      # npm run dev
 ```
 
 ---
