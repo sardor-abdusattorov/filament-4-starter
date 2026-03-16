@@ -11,7 +11,7 @@ install:
 	docker compose exec app php artisan project:cache
 	docker compose exec app php artisan optimize:clear
 	@echo ""
-	@echo "✅ Готово! Открывай: http://localhost/admin"
+	@echo "✅ Finished! Open: http://localhost/admin"
 
 dev:
 	docker compose up -d

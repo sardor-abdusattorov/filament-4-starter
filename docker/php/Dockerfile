@@ -55,7 +55,7 @@ COPY . .
 
 # Create required Laravel directories
 RUN mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views storage/logs \
-    && chmod -R 775 bootstrap/cache storage
+    && chown -R app:app bootstrap/cache storage
 
 # Generate autoload after code exists (--no-scripts = не запускать artisan во время сборки)
 RUN composer dump-autoload --optimize --no-scripts
