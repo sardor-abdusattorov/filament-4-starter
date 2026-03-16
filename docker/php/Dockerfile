@@ -36,7 +36,8 @@ RUN pecl install redis && docker-php-ext-enable redis
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create user
-RUN addgroup -g 1000 app && adduser -u 1000 -G app -s /bin/sh -D app
+RUN addgroup -g 1000 app && adduser -u 1000 -G app -s /bin/sh -D app \
+    && git config --global --add safe.directory /var/www/html
 
 WORKDIR /var/www/html
 
