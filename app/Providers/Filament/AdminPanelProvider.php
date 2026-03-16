@@ -25,6 +25,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
+use Spatie\Permission\Models\Role;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -36,7 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->authGuard('web')
             ->login()
-            ->darkMode(true)
+            ->darkMode()
             ->defaultThemeMode(ThemeMode::System)
             ->font('Roboto')
             ->colors([
@@ -75,14 +76,18 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationGroup(fn () => __('app.label.administration'))
                     ->navigationSort(5)
-                    ->navigationBadge(fn () => (string) \Spatie\Permission\Models\Role::count()),
+                    ->navigationBadge(fn () => (string) Role::count()),
 
                 AuthDesignerPlugin::make()
-                    ->login(fn (AuthPageConfig $config) => $config
+                    ->defaults(fn ($config) => $config
                         ->media(asset('/images/background.jpeg'))
                         ->mediaPosition(MediaPosition::Right)
                         ->mediaSize('60%')
-                    ),
+                    )
+                    ->login()
+                    ->passwordReset()
+                    ->emailVerification()
+                    ->themeToggle(bottom: '1rem', left: '50%'),
 
                 BreezyCore::make()
                     ->myProfile(
